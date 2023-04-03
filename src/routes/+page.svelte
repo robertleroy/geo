@@ -8,40 +8,34 @@
 	<!-- <Details city={data.city} ip={data.ip} /> -->
 
   <div class="location">
-    <div class="ip">
-      <span class="label">ip: </span>{data.ip}</div>
-      <div class="real_ip">
-        <span class="label">real_ip: </span>{data.real_ip}</div>
-    <div class="forwarded">
-      <span class="label">forwarded: </span>{data.forwarded}</div>
-    <div class="v_forwarded">
-      <span class="label">v_forwarded: </span>{data.v_forwarded}</div>
-    <div class="region">
-      <span class="label">region: </span>{data.country_region}</div>
-    <div class="country">
-      <span class="label">country: </span>{data.country}</div>
-    <div class="timezone">
-      <span class="label">timezone: </span>{data.timezone}</div>
-    <div class="gps">
-      <div class="lat">
-      <span class="label">latitude: </span>{data.latitude}</div>
-      <div class="lon">
-      <span class="label">longitude: </span>{data.longitude}</div>
+
+    <div class="location_name">
+      <div class="city">{data.city}</div>
+      <div class="region">{data.country_region}</div>
+      <div class="country">{data.country}</div>
+      <div class="timezone">{data.timezone}</div>
+      <div class="lat">{data.latitude},</div>
+      <div class="lon">{data.longitude}</div>
+      <div>ip:</div>
+      <div class="ip">{data.ip}</div>
     </div>
   </div>
 
   <br>
-<div>{data.cold ? 'COLD' : 'HOT'}</div>
+<div>{data.cold ? 'cold' : 'hot'}</div>
 </div>
 
 <style>
   .my_page {
     width: fit-content;
-    margin: 10vh auto;
+    margin:5vh auto;
   }
-  .label {
-    display: inline-block;
-    width: 13ch;
+
+  .location_name {
+    display: grid;
+    grid-template-columns: max-content max-content;
+    align-items: center;
+    gap: 0 1rem;
   }
 
 </style>
