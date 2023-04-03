@@ -6,8 +6,8 @@ export function load(event) {
 	cold = false;
 
 	const ip = event.getClientAddress();
-	// const real_ip = decodeURIComponent(event.request.headers.get('x-real-ip') ?? 'unknown');
-	// const forwarded = decodeURIComponent(event.request.headers.get('x-forwarded-for') ?? 'unknown');
+	const real_ip = decodeURIComponent(event.request.headers.get('x-real-ip') ?? 'unknown');
+	const forwarded = decodeURIComponent(event.request.headers.get('x-forwarded-for') ?? 'unknown');
 	const city = decodeURIComponent(event.request.headers.get('x-vercel-ip-city') ?? 'unknown');
 	const latitude = decodeURIComponent(event.request.headers.get('x-vercel-ip-latitude') ?? 'unknown');
 	const longitude = decodeURIComponent(event.request.headers.get('x-vercel-ip-longitude') ?? 'unknown');
@@ -17,8 +17,8 @@ export function load(event) {
 
 	return {
 		ip, 
-    // real_ip,
-		// forwarded,
+    real_ip,
+		forwarded,
     // v_forwarded,
 		city,
     latitude,

@@ -18,6 +18,10 @@
       <div class="lon">{data.longitude}</div>
       <div>ip:</div>
       <div class="ip">{data.ip}</div>
+      <div>real_ip:</div>
+      <div class="real_ip">{data.real_ip}</div>
+      <div>forwarded:</div>
+      <div class="forwarded">{data.forwarded}</div>
     </div>
   </div>
 
@@ -41,6 +45,8 @@
 </style>
 
 <!-- 
+  35.46756, -97.516434
+
   		ip, real_ip,
 		forwarded,
     v_forwarded,

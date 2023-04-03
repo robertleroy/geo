@@ -493,6 +493,8 @@ function load(event) {
   const was_cold = cold;
   cold = false;
   const ip = event.getClientAddress();
+  const real_ip = decodeURIComponent(event.request.headers.get("x-real-ip") ?? "unknown");
+  const forwarded = decodeURIComponent(event.request.headers.get("x-forwarded-for") ?? "unknown");
   const city = decodeURIComponent(event.request.headers.get("x-vercel-ip-city") ?? "unknown");
   const latitude = decodeURIComponent(event.request.headers.get("x-vercel-ip-latitude") ?? "unknown");
   const longitude = decodeURIComponent(event.request.headers.get("x-vercel-ip-longitude") ?? "unknown");
@@ -501,8 +503,8 @@ function load(event) {
   const timezone = decodeURIComponent(event.request.headers.get("x-vercel-ip-timezone") ?? "unknown");
   return {
     ip,
-    // real_ip,
-    // forwarded,
+    real_ip,
+    forwarded,
     // v_forwarded,
     city,
     latitude,
@@ -629,8 +631,8 @@ var init__2 = __esm({
   ".svelte-kit/output/server/nodes/1.js"() {
     index2 = 1;
     component2 = async () => (await Promise.resolve().then(() => (init_error_svelte(), error_svelte_exports))).default;
-    file2 = "_app/immutable/entry/error.svelte.76b2e5f5.js";
-    imports2 = ["_app/immutable/entry/error.svelte.76b2e5f5.js", "_app/immutable/chunks/index.48413d8c.js", "_app/immutable/chunks/singletons.8b10fa7a.js"];
+    file2 = "_app/immutable/entry/error.svelte.a110e472.js";
+    imports2 = ["_app/immutable/entry/error.svelte.a110e472.js", "_app/immutable/chunks/index.48413d8c.js", "_app/immutable/chunks/singletons.7a6de614.js"];
     stylesheets2 = [];
     fonts2 = [];
   }
@@ -664,7 +666,11 @@ var init_page_svelte = __esm({
       <div class="lat">${escape(data.latitude)},</div>
       <div class="lon">${escape(data.longitude)}</div>
       <div>ip:</div>
-      <div class="ip">${escape(data.ip)}</div></div></div>
+      <div class="ip">${escape(data.ip)}</div>
+      <div>real_ip:</div>
+      <div class="real_ip">${escape(data.real_ip)}</div>
+      <div>forwarded:</div>
+      <div class="forwarded">${escape(data.forwarded)}</div></div></div>
 
   <br>
 <div>${escape(data.cold ? "cold" : "hot")}</div></div>
@@ -691,8 +697,8 @@ var init__3 = __esm({
   ".svelte-kit/output/server/nodes/2.js"() {
     index3 = 2;
     component3 = async () => (await Promise.resolve().then(() => (init_page_svelte(), page_svelte_exports))).default;
-    file3 = "_app/immutable/entry/_page.svelte.1b1ae2ea.js";
-    imports3 = ["_app/immutable/entry/_page.svelte.1b1ae2ea.js", "_app/immutable/chunks/index.48413d8c.js"];
+    file3 = "_app/immutable/entry/_page.svelte.347484dc.js";
+    imports3 = ["_app/immutable/entry/_page.svelte.347484dc.js", "_app/immutable/chunks/index.48413d8c.js"];
     stylesheets3 = ["_app/immutable/assets/_page.a3579e79.css"];
     fonts3 = [];
   }
@@ -869,7 +875,7 @@ var options = {
 		<div class="error">
 			<span class="status">` + status + '</span>\n			<div class="message">\n				<h1>' + message + "</h1>\n			</div>\n		</div>\n	</body>\n</html>\n"
   },
-  version_hash: "1paa15c"
+  version_hash: "1bbr69l"
 };
 function get_hooks() {
   return {};
@@ -4105,7 +4111,7 @@ var manifest = {
   assets: /* @__PURE__ */ new Set(["favicon.png"]),
   mimeTypes: { ".png": "image/png" },
   _: {
-    client: { "start": { "file": "_app/immutable/entry/start.97381f94.js", "imports": ["_app/immutable/entry/start.97381f94.js", "_app/immutable/chunks/index.48413d8c.js", "_app/immutable/chunks/singletons.8b10fa7a.js"], "stylesheets": [], "fonts": [] }, "app": { "file": "_app/immutable/entry/app.270375f2.js", "imports": ["_app/immutable/entry/app.270375f2.js", "_app/immutable/chunks/index.48413d8c.js"], "stylesheets": [], "fonts": [] } },
+    client: { "start": { "file": "_app/immutable/entry/start.52a72e24.js", "imports": ["_app/immutable/entry/start.52a72e24.js", "_app/immutable/chunks/index.48413d8c.js", "_app/immutable/chunks/singletons.7a6de614.js"], "stylesheets": [], "fonts": [] }, "app": { "file": "_app/immutable/entry/app.b64f7623.js", "imports": ["_app/immutable/entry/app.b64f7623.js", "_app/immutable/chunks/index.48413d8c.js"], "stylesheets": [], "fonts": [] } },
     nodes: [
       () => Promise.resolve().then(() => (init__(), __exports)),
       () => Promise.resolve().then(() => (init__2(), __exports2)),
