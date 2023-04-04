@@ -11,15 +11,19 @@
 //   return { city };
 // }
 
-import { geolocation, ipAddress  } from '@vercel/edge';
+// import { geolocation, ipAddress  } from '@vercel/edge';
  
-export const config = {
-  runtime: 'edge',
-};
+// export const config = {
+//   runtime: 'edge',
+// };
 
 export async function load({event,request}) {
-  const ip = ipAddress(request) || 'unknown';
-  const { city } = geolocation(request) || 'unknown';
+  // const ip = ipAddress(request) || 'unknown';
+  // const { city } = geolocation(request) || 'unknown';
+  // console.log(ip);
+  const ip = request.headers.get('x-real-ip');
+  const city = 'test';
+
   console.log(ip);
 
   return {

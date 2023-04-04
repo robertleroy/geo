@@ -484,64 +484,22 @@ var require_set_cookie = __commonJS({
   }
 });
 
-// node_modules/@vercel/edge/dist/index.mjs
-function getHeader(request, key2) {
-  return request.headers.get(key2) ?? void 0;
-}
-function ipAddress(request) {
-  return getHeader(request, IP_HEADER_NAME);
-}
-function getRegionFromRequestId(requestId) {
-  if (!requestId) {
-    return "dev1";
-  }
-  return requestId.split(":")[0];
-}
-function geolocation(request) {
-  return {
-    city: getHeader(request, CITY_HEADER_NAME),
-    country: getHeader(request, COUNTRY_HEADER_NAME),
-    countryRegion: getHeader(request, REGION_HEADER_NAME),
-    region: getRegionFromRequestId(getHeader(request, REQUEST_ID_HEADER_NAME)),
-    latitude: getHeader(request, LATITUDE_HEADER_NAME),
-    longitude: getHeader(request, LONGITUDE_HEADER_NAME)
-  };
-}
-var CITY_HEADER_NAME, COUNTRY_HEADER_NAME, IP_HEADER_NAME, LATITUDE_HEADER_NAME, LONGITUDE_HEADER_NAME, REGION_HEADER_NAME, REQUEST_ID_HEADER_NAME;
-var init_dist = __esm({
-  "node_modules/@vercel/edge/dist/index.mjs"() {
-    CITY_HEADER_NAME = "x-vercel-ip-city";
-    COUNTRY_HEADER_NAME = "x-vercel-ip-country";
-    IP_HEADER_NAME = "x-real-ip";
-    LATITUDE_HEADER_NAME = "x-vercel-ip-latitude";
-    LONGITUDE_HEADER_NAME = "x-vercel-ip-longitude";
-    REGION_HEADER_NAME = "x-vercel-ip-country-region";
-    REQUEST_ID_HEADER_NAME = "x-vercel-id";
-  }
-});
-
 // .svelte-kit/output/server/entries/pages/_layout.server.js
 var layout_server_exports = {};
 __export(layout_server_exports, {
-  config: () => config,
   load: () => load
 });
 async function load({ event, request }) {
-  const ip = ipAddress(request) || "unknown";
-  const { city } = geolocation(request) || "unknown";
+  const ip = request.headers.get("x-real-ip");
+  const city = "test";
   console.log(ip);
   return {
     city,
     ip
   };
 }
-var config;
 var init_layout_server = __esm({
   ".svelte-kit/output/server/entries/pages/_layout.server.js"() {
-    init_dist();
-    config = {
-      runtime: "edge"
-    };
   }
 });
 
@@ -653,8 +611,8 @@ var init__2 = __esm({
   ".svelte-kit/output/server/nodes/1.js"() {
     index2 = 1;
     component2 = async () => (await Promise.resolve().then(() => (init_error_svelte(), error_svelte_exports))).default;
-    file2 = "_app/immutable/entry/error.svelte.a5585330.js";
-    imports2 = ["_app/immutable/entry/error.svelte.a5585330.js", "_app/immutable/chunks/index.48413d8c.js", "_app/immutable/chunks/singletons.278d9d41.js"];
+    file2 = "_app/immutable/entry/error.svelte.741b2680.js";
+    imports2 = ["_app/immutable/entry/error.svelte.741b2680.js", "_app/immutable/chunks/index.48413d8c.js", "_app/immutable/chunks/singletons.e52e67a0.js"];
     stylesheets2 = [];
     fonts2 = [];
   }
@@ -901,7 +859,7 @@ var options = {
 		<div class="error">
 			<span class="status">` + status + '</span>\n			<div class="message">\n				<h1>' + message + "</h1>\n			</div>\n		</div>\n	</body>\n</html>\n"
   },
-  version_hash: "1rfwr7g"
+  version_hash: "j2uu3d"
 };
 function get_hooks() {
   return {};
@@ -4137,7 +4095,7 @@ var manifest = {
   assets: /* @__PURE__ */ new Set(["favicon.png"]),
   mimeTypes: { ".png": "image/png" },
   _: {
-    client: { "start": { "file": "_app/immutable/entry/start.ba9f6c40.js", "imports": ["_app/immutable/entry/start.ba9f6c40.js", "_app/immutable/chunks/index.48413d8c.js", "_app/immutable/chunks/singletons.278d9d41.js"], "stylesheets": [], "fonts": [] }, "app": { "file": "_app/immutable/entry/app.4d56e2b9.js", "imports": ["_app/immutable/entry/app.4d56e2b9.js", "_app/immutable/chunks/index.48413d8c.js"], "stylesheets": [], "fonts": [] } },
+    client: { "start": { "file": "_app/immutable/entry/start.fdd1f39b.js", "imports": ["_app/immutable/entry/start.fdd1f39b.js", "_app/immutable/chunks/index.48413d8c.js", "_app/immutable/chunks/singletons.e52e67a0.js"], "stylesheets": [], "fonts": [] }, "app": { "file": "_app/immutable/entry/app.c1110753.js", "imports": ["_app/immutable/entry/app.c1110753.js", "_app/immutable/chunks/index.48413d8c.js"], "stylesheets": [], "fonts": [] } },
     nodes: [
       () => Promise.resolve().then(() => (init__(), __exports)),
       () => Promise.resolve().then(() => (init__2(), __exports2)),
