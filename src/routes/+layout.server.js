@@ -22,7 +22,7 @@ export async function load({event,request}) {
   // const { city } = geolocation(request) || 'unknown';
   // console.log(ip);
   const ip = request.headers.get('x-real-ip');
-  const city = 'test';
+  const city = request.headers.get('x-vercel-ip-city');
 
   console.log(ip);
 
