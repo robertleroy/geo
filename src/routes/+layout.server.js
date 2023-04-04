@@ -16,13 +16,8 @@ export async function load({ fetch }) {
 
   return {
     now: new Date().toLocaleTimeString(),
-    dev, url,
-    ip,
-    city,
-    region,
-    country,
-    lat,
-    lon,
+    dev: url,
+    location,
   };
 }
 
