@@ -23,7 +23,7 @@ export async function load({event,request}) {
   console.log(ip);
 
   return {
-    // city: X-Vercel-IP-City
+    city, ip
   }
 }
 

@@ -528,10 +528,11 @@ __export(layout_server_exports, {
 });
 async function load({ event, request }) {
   const ip = ipAddress(request) || "unknown";
-  geolocation(request) || "unknown";
+  const { city } = geolocation(request) || "unknown";
   console.log(ip);
   return {
-    // city: X-Vercel-IP-City
+    city,
+    ip
   };
 }
 var config;
@@ -652,8 +653,8 @@ var init__2 = __esm({
   ".svelte-kit/output/server/nodes/1.js"() {
     index2 = 1;
     component2 = async () => (await Promise.resolve().then(() => (init_error_svelte(), error_svelte_exports))).default;
-    file2 = "_app/immutable/entry/error.svelte.ea0831c8.js";
-    imports2 = ["_app/immutable/entry/error.svelte.ea0831c8.js", "_app/immutable/chunks/index.48413d8c.js", "_app/immutable/chunks/singletons.0d7cac28.js"];
+    file2 = "_app/immutable/entry/error.svelte.a5585330.js";
+    imports2 = ["_app/immutable/entry/error.svelte.a5585330.js", "_app/immutable/chunks/index.48413d8c.js", "_app/immutable/chunks/singletons.278d9d41.js"];
     stylesheets2 = [];
     fonts2 = [];
   }
@@ -690,6 +691,7 @@ var init_page_svelte = __esm({
   <div class="location">
 
     <div class="location_name svelte-35pld2"><div class="city">${escape(data?.city)}</div>
+      <div class="ip">${escape(data?.ip)}</div>
       </div></div>
 
   <br>
@@ -720,9 +722,9 @@ var init__3 = __esm({
     init_page();
     index3 = 2;
     component3 = async () => (await Promise.resolve().then(() => (init_page_svelte(), page_svelte_exports))).default;
-    file3 = "_app/immutable/entry/_page.svelte.fb2d496f.js";
+    file3 = "_app/immutable/entry/_page.svelte.6a6da83b.js";
     universal_id = "src/routes/+page.js";
-    imports3 = ["_app/immutable/entry/_page.svelte.fb2d496f.js", "_app/immutable/chunks/index.48413d8c.js", "_app/immutable/entry/_page.js.4ed993c7.js"];
+    imports3 = ["_app/immutable/entry/_page.svelte.6a6da83b.js", "_app/immutable/chunks/index.48413d8c.js", "_app/immutable/entry/_page.js.4ed993c7.js"];
     stylesheets3 = ["_app/immutable/assets/_page.a3579e79.css"];
     fonts3 = [];
   }
@@ -899,7 +901,7 @@ var options = {
 		<div class="error">
 			<span class="status">` + status + '</span>\n			<div class="message">\n				<h1>' + message + "</h1>\n			</div>\n		</div>\n	</body>\n</html>\n"
   },
-  version_hash: "sdbnw0"
+  version_hash: "1rfwr7g"
 };
 function get_hooks() {
   return {};
@@ -4135,7 +4137,7 @@ var manifest = {
   assets: /* @__PURE__ */ new Set(["favicon.png"]),
   mimeTypes: { ".png": "image/png" },
   _: {
-    client: { "start": { "file": "_app/immutable/entry/start.9e39599b.js", "imports": ["_app/immutable/entry/start.9e39599b.js", "_app/immutable/chunks/index.48413d8c.js", "_app/immutable/chunks/singletons.0d7cac28.js"], "stylesheets": [], "fonts": [] }, "app": { "file": "_app/immutable/entry/app.00327f36.js", "imports": ["_app/immutable/entry/app.00327f36.js", "_app/immutable/chunks/index.48413d8c.js"], "stylesheets": [], "fonts": [] } },
+    client: { "start": { "file": "_app/immutable/entry/start.ba9f6c40.js", "imports": ["_app/immutable/entry/start.ba9f6c40.js", "_app/immutable/chunks/index.48413d8c.js", "_app/immutable/chunks/singletons.278d9d41.js"], "stylesheets": [], "fonts": [] }, "app": { "file": "_app/immutable/entry/app.4d56e2b9.js", "imports": ["_app/immutable/entry/app.4d56e2b9.js", "_app/immutable/chunks/index.48413d8c.js"], "stylesheets": [], "fonts": [] } },
     nodes: [
       () => Promise.resolve().then(() => (init__(), __exports)),
       () => Promise.resolve().then(() => (init__2(), __exports2)),

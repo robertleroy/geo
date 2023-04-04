@@ -13,6 +13,7 @@
 
     <div class="location_name">
       <div class="city">{data?.city}</div>
+      <div class="ip">{data?.ip}</div>
       <!-- <div class="region">{data?.country_region}</div>
       <div class="country">{data?.country}</div>
       <div class="timezone">{data?.timezone}</div>
