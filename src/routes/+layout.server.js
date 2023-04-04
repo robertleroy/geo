@@ -15,8 +15,8 @@ export async function load({ fetch }) {
   const location = await res.json();
 
   return {
-    num: 3,
-    dev: url,
+    now: new Date().toLocaleTimeString(),
+    dev, url,
     location,
   };
 }

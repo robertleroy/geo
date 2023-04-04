@@ -6,7 +6,7 @@ export async function GET() {
     const ipData = await getIp.json();
     console.log("ipData", ipData);
 
-    const location = {
+    const location = await {
       ip: ipData?.query,
       city: ipData?.city,
       region: ipData?.region,
