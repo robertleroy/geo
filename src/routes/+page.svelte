@@ -9,24 +9,26 @@
 
   <div class="location">
 
+    <!-- <p>Browser: {data?.browser }</p> -->
+
     <div class="location_name">
-      <div class="city">{data.city}</div>
-      <div class="region">{data.country_region}</div>
-      <div class="country">{data.country}</div>
-      <div class="timezone">{data.timezone}</div>
-      <div class="lat">{data.latitude},</div>
-      <div class="lon">{data.longitude}</div>
+      <div class="city">{data?.city}</div>
+      <!-- <div class="region">{data?.country_region}</div>
+      <div class="country">{data?.country}</div>
+      <div class="timezone">{data?.timezone}</div>
+      <div class="lat">{data?.latitude},</div>
+      <div class="lon">{data?.longitude}</div>
       <div>ip:</div>
-      <div class="ip">{data.ip}</div>
+      <div class="ip">{data?.ip}</div>
       <div>real_ip:</div>
-      <div class="real_ip">{data.real_ip}</div>
+      <div class="real_ip">{data?.real_ip}</div>
       <div>forwarded:</div>
-      <div class="forwarded">{data.forwarded}</div>
+      <div class="forwarded">{data?.forwarded}</div> -->
     </div>
   </div>
 
   <br>
-<div>{data.cold ? 'cold' : 'hot'}</div>
+<!-- <div>{data.cold ? 'cold' : 'hot'}</div> -->
 </div>
 
 <style>

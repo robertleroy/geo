@@ -17,6 +17,7 @@
 	},
 	"type": "module",
 	"dependencies": {
-		"@sveltejs/adapter-vercel": "^2.4.1"
+		"@sveltejs/adapter-vercel": "^2.4.1",
+		"@vercel/edge": "^0.3.1"
 	}
 }

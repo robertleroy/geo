@@ -484,42 +484,63 @@ var require_set_cookie = __commonJS({
   }
 });
 
+// node_modules/@vercel/edge/dist/index.mjs
+function getHeader(request, key2) {
+  return request.headers.get(key2) ?? void 0;
+}
+function ipAddress(request) {
+  return getHeader(request, IP_HEADER_NAME);
+}
+function getRegionFromRequestId(requestId) {
+  if (!requestId) {
+    return "dev1";
+  }
+  return requestId.split(":")[0];
+}
+function geolocation(request) {
+  return {
+    city: getHeader(request, CITY_HEADER_NAME),
+    country: getHeader(request, COUNTRY_HEADER_NAME),
+    countryRegion: getHeader(request, REGION_HEADER_NAME),
+    region: getRegionFromRequestId(getHeader(request, REQUEST_ID_HEADER_NAME)),
+    latitude: getHeader(request, LATITUDE_HEADER_NAME),
+    longitude: getHeader(request, LONGITUDE_HEADER_NAME)
+  };
+}
+var CITY_HEADER_NAME, COUNTRY_HEADER_NAME, IP_HEADER_NAME, LATITUDE_HEADER_NAME, LONGITUDE_HEADER_NAME, REGION_HEADER_NAME, REQUEST_ID_HEADER_NAME;
+var init_dist = __esm({
+  "node_modules/@vercel/edge/dist/index.mjs"() {
+    CITY_HEADER_NAME = "x-vercel-ip-city";
+    COUNTRY_HEADER_NAME = "x-vercel-ip-country";
+    IP_HEADER_NAME = "x-real-ip";
+    LATITUDE_HEADER_NAME = "x-vercel-ip-latitude";
+    LONGITUDE_HEADER_NAME = "x-vercel-ip-longitude";
+    REGION_HEADER_NAME = "x-vercel-ip-country-region";
+    REQUEST_ID_HEADER_NAME = "x-vercel-id";
+  }
+});
+
 // .svelte-kit/output/server/entries/pages/_layout.server.js
 var layout_server_exports = {};
 __export(layout_server_exports, {
+  config: () => config,
   load: () => load
 });
-function load(event) {
-  const was_cold = cold;
-  cold = false;
-  const ip = event.getClientAddress();
-  const real_ip = decodeURIComponent(event.request.headers.get("x-real-ip") ?? "unknown");
-  const forwarded = decodeURIComponent(event.request.headers.get("x-forwarded-for") ?? "unknown");
-  const city = decodeURIComponent(event.request.headers.get("x-vercel-ip-city") ?? "unknown");
-  const latitude = decodeURIComponent(event.request.headers.get("x-vercel-ip-latitude") ?? "unknown");
-  const longitude = decodeURIComponent(event.request.headers.get("x-vercel-ip-longitude") ?? "unknown");
-  const country = decodeURIComponent(event.request.headers.get("x-vercel-ip-country") ?? "unknown");
-  const country_region = decodeURIComponent(event.request.headers.get("x-vercel-ip-country-region") ?? "unknown");
-  const timezone = decodeURIComponent(event.request.headers.get("x-vercel-ip-timezone") ?? "unknown");
+async function load({ event, request }) {
+  const ip = ipAddress(request) || "unknown";
+  geolocation(request) || "unknown";
+  console.log(ip);
   return {
-    ip,
-    real_ip,
-    forwarded,
-    // v_forwarded,
-    city,
-    latitude,
-    longitude,
-    country,
-    country_region,
-    timezone,
-    now: (/* @__PURE__ */ new Date()).toISOString(),
-    cold: was_cold
+    // city: X-Vercel-IP-City
   };
 }
-var cold;
+var config;
 var init_layout_server = __esm({
   ".svelte-kit/output/server/entries/pages/_layout.server.js"() {
-    cold = true;
+    init_dist();
+    config = {
+      runtime: "edge"
+    };
   }
 });
 
@@ -631,10 +652,17 @@ var init__2 = __esm({
   ".svelte-kit/output/server/nodes/1.js"() {
     index2 = 1;
     component2 = async () => (await Promise.resolve().then(() => (init_error_svelte(), error_svelte_exports))).default;
-    file2 = "_app/immutable/entry/error.svelte.a110e472.js";
-    imports2 = ["_app/immutable/entry/error.svelte.a110e472.js", "_app/immutable/chunks/index.48413d8c.js", "_app/immutable/chunks/singletons.7a6de614.js"];
+    file2 = "_app/immutable/entry/error.svelte.ea0831c8.js";
+    imports2 = ["_app/immutable/entry/error.svelte.ea0831c8.js", "_app/immutable/chunks/index.48413d8c.js", "_app/immutable/chunks/singletons.0d7cac28.js"];
     stylesheets2 = [];
     fonts2 = [];
+  }
+});
+
+// .svelte-kit/output/server/entries/pages/_page.js
+var page_exports = {};
+var init_page = __esm({
+  ".svelte-kit/output/server/entries/pages/_page.js"() {
   }
 });
 
@@ -659,21 +687,13 @@ var init_page_svelte = __esm({
       $$result.css.add(css2);
       return `<div class="my_page svelte-35pld2">
 
-  <div class="location"><div class="location_name svelte-35pld2"><div class="city">${escape(data.city)}</div>
-      <div class="region">${escape(data.country_region)}</div>
-      <div class="country">${escape(data.country)}</div>
-      <div class="timezone">${escape(data.timezone)}</div>
-      <div class="lat">${escape(data.latitude)},</div>
-      <div class="lon">${escape(data.longitude)}</div>
-      <div>ip:</div>
-      <div class="ip">${escape(data.ip)}</div>
-      <div>real_ip:</div>
-      <div class="real_ip">${escape(data.real_ip)}</div>
-      <div>forwarded:</div>
-      <div class="forwarded">${escape(data.forwarded)}</div></div></div>
+  <div class="location">
+
+    <div class="location_name svelte-35pld2"><div class="city">${escape(data?.city)}</div>
+      </div></div>
 
   <br>
-<div>${escape(data.cold ? "cold" : "hot")}</div></div>
+</div>
 
 
 
@@ -690,15 +710,19 @@ __export(__exports3, {
   fonts: () => fonts3,
   imports: () => imports3,
   index: () => index3,
-  stylesheets: () => stylesheets3
+  stylesheets: () => stylesheets3,
+  universal: () => page_exports,
+  universal_id: () => universal_id
 });
-var index3, component3, file3, imports3, stylesheets3, fonts3;
+var index3, component3, file3, universal_id, imports3, stylesheets3, fonts3;
 var init__3 = __esm({
   ".svelte-kit/output/server/nodes/2.js"() {
+    init_page();
     index3 = 2;
     component3 = async () => (await Promise.resolve().then(() => (init_page_svelte(), page_svelte_exports))).default;
-    file3 = "_app/immutable/entry/_page.svelte.347484dc.js";
-    imports3 = ["_app/immutable/entry/_page.svelte.347484dc.js", "_app/immutable/chunks/index.48413d8c.js"];
+    file3 = "_app/immutable/entry/_page.svelte.fb2d496f.js";
+    universal_id = "src/routes/+page.js";
+    imports3 = ["_app/immutable/entry/_page.svelte.fb2d496f.js", "_app/immutable/chunks/index.48413d8c.js", "_app/immutable/entry/_page.js.4ed993c7.js"];
     stylesheets3 = ["_app/immutable/assets/_page.a3579e79.css"];
     fonts3 = [];
   }
@@ -875,7 +899,7 @@ var options = {
 		<div class="error">
 			<span class="status">` + status + '</span>\n			<div class="message">\n				<h1>' + message + "</h1>\n			</div>\n		</div>\n	</body>\n</html>\n"
   },
-  version_hash: "1bbr69l"
+  version_hash: "sdbnw0"
 };
 function get_hooks() {
   return {};
@@ -4111,7 +4135,7 @@ var manifest = {
   assets: /* @__PURE__ */ new Set(["favicon.png"]),
   mimeTypes: { ".png": "image/png" },
   _: {
-    client: { "start": { "file": "_app/immutable/entry/start.52a72e24.js", "imports": ["_app/immutable/entry/start.52a72e24.js", "_app/immutable/chunks/index.48413d8c.js", "_app/immutable/chunks/singletons.7a6de614.js"], "stylesheets": [], "fonts": [] }, "app": { "file": "_app/immutable/entry/app.b64f7623.js", "imports": ["_app/immutable/entry/app.b64f7623.js", "_app/immutable/chunks/index.48413d8c.js"], "stylesheets": [], "fonts": [] } },
+    client: { "start": { "file": "_app/immutable/entry/start.9e39599b.js", "imports": ["_app/immutable/entry/start.9e39599b.js", "_app/immutable/chunks/index.48413d8c.js", "_app/immutable/chunks/singletons.0d7cac28.js"], "stylesheets": [], "fonts": [] }, "app": { "file": "_app/immutable/entry/app.00327f36.js", "imports": ["_app/immutable/entry/app.00327f36.js", "_app/immutable/chunks/index.48413d8c.js"], "stylesheets": [], "fonts": [] } },
     nodes: [
       () => Promise.resolve().then(() => (init__(), __exports)),
       () => Promise.resolve().then(() => (init__2(), __exports2)),
