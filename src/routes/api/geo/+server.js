@@ -1,27 +1,19 @@
 import { json } from "@sveltejs/kit";
 
-export async function GET({ request }) {
+export function GET({ request }) {
+
   try {
     const location = {
       ip: getClientAddress(),
-      city: decodeURIComponent(
-        request.headers.get("x-vercel-ip-city") ?? "unknown"
-      ),
-      region: decodeURIComponent(
-        request.headers.get("x-vercel-ip-country-region") ?? "unknown"
-      ),
-      country: decodeURIComponent(
-        request.headers.get("x-vercel-ip-country") ?? "unknown"
-      ),
-      lat: decodeURIComponent(
-        request.headers.get("x-vercel-ip-latitude") ?? "unknown"
-      ),
-      lon: decodeURIComponent(
-        request.headers.get("x-vercel-ip-longitude") ?? "unknown"
-      ),
+      city: decodeURIComponent(request.headers.get("x-vercel-ip-city") ?? "unknown"),
+      region: decodeURIComponent(request.headers.get("x-vercel-ip-country-region") ?? "unknown"),
+      country: decodeURIComponent(request.headers.get("x-vercel-ip-country") ?? "unknown"),
+      lat: decodeURIComponent(request.headers.get("x-vercel-ip-latitude") ?? "unknown"),
+      lon: decodeURIComponent(request.headers.get("x-vercel-ip-longitude") ?? "unknown")
     };
 
     return json(location);
+
   } catch (error) {
     console.log("load error:", error);
   }
