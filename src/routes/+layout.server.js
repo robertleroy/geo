@@ -1,18 +1,21 @@
 import { dev } from "$app/environment";
 
-let url;
-
-if (dev) {
-  url = "/api/ipapi";
-} else {
-  url = "/api/geo";
-}
+  let url;
+  // console.log('dev'.dev);
+  if (dev) {
+    url = "/api/ipapi";
+  } else {
+    url = "/api/geo";
+  }
 
 export async function load({ fetch }) {
+
+
   const res = await fetch(url);
   const location = await res.json();
 
   return {
+    dev: url,
     location,
   };
 }
