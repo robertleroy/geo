@@ -2,7 +2,7 @@
 <script>
   export let data;
   console.log('page', data);
-  const { location } = data;
+  // const { location } = data;
 
 </script>
 
@@ -14,9 +14,9 @@
     <!-- <p>Browser: {data?.browser }</p> -->
 
     <div class="grid">
-      <div class="location">{location?.city}, {location?.region} {@html '&emsp;'} {location?.country}</div>
-      <div class="gps">{location?.lat}, {location?.lon}</div>
-      <div class="ip">{location?.ip}</div>
+      <div class="location">{data?.city}, {data?.region} {@html '&emsp;'} {data?.country}</div>
+      <div class="gps">{data?.lat}, {data?.lon}</div>
+      <div class="ip">{data?.ip}</div>
     </div>
   </div>
 

@@ -576,12 +576,17 @@ __export(layout_server_exports, {
 });
 async function load({ fetch: fetch2 }) {
   const res = await fetch2(url);
-  const location = await res.json();
+  await res.json();
   return {
     now: (/* @__PURE__ */ new Date()).toLocaleTimeString(),
     dev,
     url,
-    location
+    ip,
+    city,
+    region,
+    country,
+    lat,
+    lon
   };
 }
 var dev, url;
@@ -703,8 +708,8 @@ var init__2 = __esm({
   ".svelte-kit/output/server/nodes/1.js"() {
     index2 = 1;
     component2 = async () => (await Promise.resolve().then(() => (init_error_svelte(), error_svelte_exports))).default;
-    file2 = "_app/immutable/entry/error.svelte.4f9da9c7.js";
-    imports2 = ["_app/immutable/entry/error.svelte.4f9da9c7.js", "_app/immutable/chunks/index.e3c2d60e.js", "_app/immutable/chunks/singletons.4cefaee0.js"];
+    file2 = "_app/immutable/entry/error.svelte.23816ed1.js";
+    imports2 = ["_app/immutable/entry/error.svelte.23816ed1.js", "_app/immutable/chunks/index.e3c2d60e.js", "_app/immutable/chunks/singletons.89836a73.js"];
     stylesheets2 = [];
     fonts2 = [];
   }
@@ -733,7 +738,6 @@ var init_page_svelte = __esm({
     Page = create_ssr_component(($$result, $$props, $$bindings, slots) => {
       let { data } = $$props;
       console.log("page", data);
-      const { location } = data;
       if ($$props.data === void 0 && $$bindings.data && data !== void 0)
         $$bindings.data(data);
       $$result.css.add(css2);
@@ -741,9 +745,9 @@ var init_page_svelte = __esm({
 
   <div class="location">
 
-    <div class="grid svelte-gln0v9"><div class="location">${escape(location?.city)}, ${escape(location?.region)} <!-- HTML_TAG_START -->&emsp;<!-- HTML_TAG_END --> ${escape(location?.country)}</div>
-      <div class="gps">${escape(location?.lat)}, ${escape(location?.lon)}</div>
-      <div class="ip">${escape(location?.ip)}</div></div></div>
+    <div class="grid svelte-gln0v9"><div class="location">${escape(data?.city)}, ${escape(data?.region)} <!-- HTML_TAG_START -->&emsp;<!-- HTML_TAG_END --> ${escape(data?.country)}</div>
+      <div class="gps">${escape(data?.lat)}, ${escape(data?.lon)}</div>
+      <div class="ip">${escape(data?.ip)}</div></div></div>
 
   <br>
 </div>
@@ -773,9 +777,9 @@ var init__3 = __esm({
     init_page();
     index3 = 2;
     component3 = async () => (await Promise.resolve().then(() => (init_page_svelte(), page_svelte_exports))).default;
-    file3 = "_app/immutable/entry/_page.svelte.b69ef2b4.js";
+    file3 = "_app/immutable/entry/_page.svelte.b690026e.js";
     universal_id = "src/routes/+page.js";
-    imports3 = ["_app/immutable/entry/_page.svelte.b69ef2b4.js", "_app/immutable/chunks/index.e3c2d60e.js", "_app/immutable/entry/_page.js.4ed993c7.js"];
+    imports3 = ["_app/immutable/entry/_page.svelte.b690026e.js", "_app/immutable/chunks/index.e3c2d60e.js", "_app/immutable/entry/_page.js.4ed993c7.js"];
     stylesheets3 = ["_app/immutable/assets/_page.b34a2226.css"];
     fonts3 = [];
   }
@@ -787,24 +791,23 @@ __export(server_exports, {
   GET: () => GET
 });
 async function GET(event) {
-  const ip = event.getClientAddress();
+  const ip2 = event.getClientAddress();
   decodeURIComponent(event.request.headers.get("x-real-ip") ?? "unknown");
   decodeURIComponent(event.request.headers.get("x-forwarded-for") ?? "unknown");
-  const city = decodeURIComponent(event.request.headers.get("x-vercel-ip-city") ?? "unknown");
-  const lat = decodeURIComponent(event.request.headers.get("x-vercel-ip-latitude") ?? "unknown");
-  const lon = decodeURIComponent(event.request.headers.get("x-vercel-ip-longitude") ?? "unknown");
-  const country = decodeURIComponent(event.request.headers.get("x-vercel-ip-country") ?? "unknown");
-  const region = decodeURIComponent(event.request.headers.get("x-vercel-ip-country-region") ?? "unknown");
+  const city2 = decodeURIComponent(event.request.headers.get("x-vercel-ip-city") ?? "unknown");
+  const lat2 = decodeURIComponent(event.request.headers.get("x-vercel-ip-latitude") ?? "unknown");
+  const lon2 = decodeURIComponent(event.request.headers.get("x-vercel-ip-longitude") ?? "unknown");
+  const country2 = decodeURIComponent(event.request.headers.get("x-vercel-ip-country") ?? "unknown");
+  const region2 = decodeURIComponent(event.request.headers.get("x-vercel-ip-country-region") ?? "unknown");
   decodeURIComponent(event.request.headers.get("x-vercel-ip-timezone") ?? "unknown");
-  let location = {
-    ip,
-    city,
-    region,
-    country,
-    lat,
-    lon
-  };
-  return json(location);
+  return json({
+    ip: ip2,
+    city: city2,
+    region: region2,
+    country: country2,
+    lat: lat2,
+    lon: lon2
+  });
 }
 var init_server = __esm({
   ".svelte-kit/output/server/entries/endpoints/api/geo/_server.js"() {
@@ -1008,7 +1011,7 @@ var options = {
 		<div class="error">
 			<span class="status">` + status + '</span>\n			<div class="message">\n				<h1>' + message + "</h1>\n			</div>\n		</div>\n	</body>\n</html>\n"
   },
-  version_hash: "x9f3f6"
+  version_hash: "nwgsda"
 };
 function get_hooks() {
   return {};
@@ -4176,7 +4179,7 @@ var manifest = {
   assets: /* @__PURE__ */ new Set(["favicon.png"]),
   mimeTypes: { ".png": "image/png" },
   _: {
-    client: { "start": { "file": "_app/immutable/entry/start.6f9e1ce8.js", "imports": ["_app/immutable/entry/start.6f9e1ce8.js", "_app/immutable/chunks/index.e3c2d60e.js", "_app/immutable/chunks/singletons.4cefaee0.js"], "stylesheets": [], "fonts": [] }, "app": { "file": "_app/immutable/entry/app.c3a419c2.js", "imports": ["_app/immutable/entry/app.c3a419c2.js", "_app/immutable/chunks/index.e3c2d60e.js"], "stylesheets": [], "fonts": [] } },
+    client: { "start": { "file": "_app/immutable/entry/start.e5795ed7.js", "imports": ["_app/immutable/entry/start.e5795ed7.js", "_app/immutable/chunks/index.e3c2d60e.js", "_app/immutable/chunks/singletons.89836a73.js"], "stylesheets": [], "fonts": [] }, "app": { "file": "_app/immutable/entry/app.8597f780.js", "imports": ["_app/immutable/entry/app.8597f780.js", "_app/immutable/chunks/index.e3c2d60e.js"], "stylesheets": [], "fonts": [] } },
     nodes: [
       () => Promise.resolve().then(() => (init__(), __exports)),
       () => Promise.resolve().then(() => (init__2(), __exports2)),

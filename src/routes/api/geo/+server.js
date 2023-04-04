@@ -10,14 +10,20 @@ export async function GET(event) {
 	const region = decodeURIComponent(event.request.headers.get('x-vercel-ip-country-region') ?? 'unknown');
 	const timezone = decodeURIComponent(event.request.headers.get('x-vercel-ip-timezone') ?? 'unknown');
 
-  let location = {
+  // let location = {
+  //   ip,
+  //   city,
+  //   region,
+  //   country,
+  //   lat,
+  //   lon
+  // }
+	return json({
     ip,
     city,
     region,
     country,
     lat,
-    lon,
-    
-  }
-	return json(location);
+    lon
+  });
 }
