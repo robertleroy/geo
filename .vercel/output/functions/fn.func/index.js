@@ -570,7 +570,7 @@ async function load({ fetch: fetch2 }) {
   const res = await fetch2(url);
   const location = await res.json();
   return {
-    num: 2,
+    num: 3,
     dev: url,
     location
   };
@@ -692,8 +692,8 @@ var init__2 = __esm({
   ".svelte-kit/output/server/nodes/1.js"() {
     index2 = 1;
     component2 = async () => (await Promise.resolve().then(() => (init_error_svelte(), error_svelte_exports))).default;
-    file2 = "_app/immutable/entry/error.svelte.7991b997.js";
-    imports2 = ["_app/immutable/entry/error.svelte.7991b997.js", "_app/immutable/chunks/index.e3c2d60e.js", "_app/immutable/chunks/singletons.805282b4.js"];
+    file2 = "_app/immutable/entry/error.svelte.e6f4f35c.js";
+    imports2 = ["_app/immutable/entry/error.svelte.e6f4f35c.js", "_app/immutable/chunks/index.e3c2d60e.js", "_app/immutable/chunks/singletons.9e917cab.js"];
     stylesheets2 = [];
     fonts2 = [];
   }
@@ -775,20 +775,27 @@ var server_exports = {};
 __export(server_exports, {
   GET: () => GET
 });
-function GET(event) {
-  try {
-    const location = {
-      ip: getClientAddress(),
-      city: decodeURIComponent(event.request.headers.get("x-vercel-ip-city") ?? "unknown"),
-      region: decodeURIComponent(event.request.headers.get("x-vercel-ip-country-region") ?? "unknown"),
-      country: decodeURIComponent(event.request.headers.get("x-vercel-ip-country") ?? "unknown"),
-      lat: decodeURIComponent(event.request.headers.get("x-vercel-ip-latitude") ?? "unknown"),
-      lon: decodeURIComponent(event.request.headers.get("x-vercel-ip-longitude") ?? "unknown")
-    };
-    return json(location);
-  } catch (error2) {
-    console.log("load error:", error2);
-  }
+async function GET(event) {
+  const ip = event.getClientAddress();
+  const real_ip = decodeURIComponent(event.request.headers.get("x-real-ip") ?? "unknown");
+  const forwarded = decodeURIComponent(event.request.headers.get("x-forwarded-for") ?? "unknown");
+  const city = decodeURIComponent(event.request.headers.get("x-vercel-ip-city") ?? "unknown");
+  const lat = decodeURIComponent(event.request.headers.get("x-vercel-ip-latitude") ?? "unknown");
+  const lon = decodeURIComponent(event.request.headers.get("x-vercel-ip-longitude") ?? "unknown");
+  const country = decodeURIComponent(event.request.headers.get("x-vercel-ip-country") ?? "unknown");
+  const region = decodeURIComponent(event.request.headers.get("x-vercel-ip-country-region") ?? "unknown");
+  decodeURIComponent(event.request.headers.get("x-vercel-ip-timezone") ?? "unknown");
+  const location = {
+    real_ip,
+    forwarded,
+    ip,
+    city,
+    region,
+    country,
+    lat,
+    lon
+  };
+  return json(location);
 }
 var init_server = __esm({
   ".svelte-kit/output/server/entries/endpoints/api/geo/_server.js"() {
@@ -989,7 +996,7 @@ var options = {
 		<div class="error">
 			<span class="status">` + status + '</span>\n			<div class="message">\n				<h1>' + message + "</h1>\n			</div>\n		</div>\n	</body>\n</html>\n"
   },
-  version_hash: "12a88fn"
+  version_hash: "142hp0y"
 };
 function get_hooks() {
   return {};
@@ -4158,7 +4165,7 @@ var manifest = {
   assets: /* @__PURE__ */ new Set(["favicon.png"]),
   mimeTypes: { ".png": "image/png" },
   _: {
-    client: { "start": { "file": "_app/immutable/entry/start.bb6a6ad2.js", "imports": ["_app/immutable/entry/start.bb6a6ad2.js", "_app/immutable/chunks/index.e3c2d60e.js", "_app/immutable/chunks/singletons.805282b4.js"], "stylesheets": [], "fonts": [] }, "app": { "file": "_app/immutable/entry/app.415aee73.js", "imports": ["_app/immutable/entry/app.415aee73.js", "_app/immutable/chunks/index.e3c2d60e.js"], "stylesheets": [], "fonts": [] } },
+    client: { "start": { "file": "_app/immutable/entry/start.89c6516d.js", "imports": ["_app/immutable/entry/start.89c6516d.js", "_app/immutable/chunks/index.e3c2d60e.js", "_app/immutable/chunks/singletons.9e917cab.js"], "stylesheets": [], "fonts": [] }, "app": { "file": "_app/immutable/entry/app.bdc95b62.js", "imports": ["_app/immutable/entry/app.bdc95b62.js", "_app/immutable/chunks/index.e3c2d60e.js"], "stylesheets": [], "fonts": [] } },
     nodes: [
       () => Promise.resolve().then(() => (init__(), __exports)),
       () => Promise.resolve().then(() => (init__2(), __exports2)),

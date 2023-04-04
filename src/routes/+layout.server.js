@@ -15,7 +15,7 @@ export async function load({ fetch }) {
   const location = await res.json();
 
   return {
-    num: 2,
+    num: 3,
     dev: url,
     location,
   };
