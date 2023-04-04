@@ -15,6 +15,7 @@ export async function load({ fetch }) {
   const location = await res.json();
 
   return {
+    num: 1,
     dev: url,
     location,
   };
