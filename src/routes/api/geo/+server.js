@@ -19,5 +19,5 @@ export async function GET({request}) {
     lon
   }
 
-	return json(location);
+	return json(...location);
 }
