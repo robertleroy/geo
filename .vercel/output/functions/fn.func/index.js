@@ -692,8 +692,8 @@ var init__2 = __esm({
   ".svelte-kit/output/server/nodes/1.js"() {
     index2 = 1;
     component2 = async () => (await Promise.resolve().then(() => (init_error_svelte(), error_svelte_exports))).default;
-    file2 = "_app/immutable/entry/error.svelte.526c0978.js";
-    imports2 = ["_app/immutable/entry/error.svelte.526c0978.js", "_app/immutable/chunks/index.e3c2d60e.js", "_app/immutable/chunks/singletons.58d9408a.js"];
+    file2 = "_app/immutable/entry/error.svelte.8b0fc32a.js";
+    imports2 = ["_app/immutable/entry/error.svelte.8b0fc32a.js", "_app/immutable/chunks/index.e3c2d60e.js", "_app/immutable/chunks/singletons.70d4f7c5.js"];
     stylesheets2 = [];
     fonts2 = [];
   }
@@ -775,24 +775,25 @@ var server_exports = {};
 __export(server_exports, {
   GET: () => GET
 });
-async function GET(event) {
+async function GET({ request }) {
   const ip = event.getClientAddress();
-  decodeURIComponent(event.request.headers.get("x-real-ip") ?? "unknown");
-  decodeURIComponent(event.request.headers.get("x-forwarded-for") ?? "unknown");
-  const city = decodeURIComponent(event.request.headers.get("x-vercel-ip-city") ?? "unknown");
-  const lat = decodeURIComponent(event.request.headers.get("x-vercel-ip-latitude") ?? "unknown");
-  const lon = decodeURIComponent(event.request.headers.get("x-vercel-ip-longitude") ?? "unknown");
-  const country = decodeURIComponent(event.request.headers.get("x-vercel-ip-country") ?? "unknown");
-  const region = decodeURIComponent(event.request.headers.get("x-vercel-ip-country-region") ?? "unknown");
-  decodeURIComponent(event.request.headers.get("x-vercel-ip-timezone") ?? "unknown");
-  return json({
+  decodeURIComponent(request.headers.get("x-real-ip") ?? "unknown");
+  decodeURIComponent(request.headers.get("x-forwarded-for") ?? "unknown");
+  const city = decodeURIComponent(request.headers.get("x-vercel-ip-city") ?? "unknown");
+  const lat = decodeURIComponent(request.headers.get("x-vercel-ip-latitude") ?? "unknown");
+  const lon = decodeURIComponent(request.headers.get("x-vercel-ip-longitude") ?? "unknown");
+  const country = decodeURIComponent(request.headers.get("x-vercel-ip-country") ?? "unknown");
+  const region = decodeURIComponent(request.headers.get("x-vercel-ip-country-region") ?? "unknown");
+  decodeURIComponent(request.headers.get("x-vercel-ip-timezone") ?? "unknown");
+  let location = {
     ip,
     city,
     region,
     country,
     lat,
     lon
-  });
+  };
+  return json(location);
 }
 var init_server = __esm({
   ".svelte-kit/output/server/entries/endpoints/api/geo/_server.js"() {
@@ -993,7 +994,7 @@ var options = {
 		<div class="error">
 			<span class="status">` + status + '</span>\n			<div class="message">\n				<h1>' + message + "</h1>\n			</div>\n		</div>\n	</body>\n</html>\n"
   },
-  version_hash: "vtxnzp"
+  version_hash: "1mcnz4k"
 };
 function get_hooks() {
   return {};
@@ -1531,27 +1532,27 @@ function static_error_page(options2, status, message) {
     status
   });
 }
-async function handle_fatal_error(event, options2, error2) {
+async function handle_fatal_error(event2, options2, error2) {
   error2 = error2 instanceof HttpError ? error2 : coalesce_to_error(error2);
   const status = error2 instanceof HttpError ? error2.status : 500;
-  const body = await handle_error_and_jsonify(event, options2, error2);
-  const type = negotiate(event.request.headers.get("accept") || "text/html", [
+  const body = await handle_error_and_jsonify(event2, options2, error2);
+  const type = negotiate(event2.request.headers.get("accept") || "text/html", [
     "application/json",
     "text/html"
   ]);
-  if (event.isDataRequest || type === "application/json") {
+  if (event2.isDataRequest || type === "application/json") {
     return json(body, {
       status
     });
   }
   return static_error_page(options2, status, body.message);
 }
-async function handle_error_and_jsonify(event, options2, error2) {
+async function handle_error_and_jsonify(event2, options2, error2) {
   if (error2 instanceof HttpError) {
     return error2.body;
   } else {
-    return await options2.hooks.handleError({ error: error2, event }) ?? {
-      message: event.route.id != null ? "Internal Error" : "Not Found"
+    return await options2.hooks.handleError({ error: error2, event: event2 }) ?? {
+      message: event2.route.id != null ? "Internal Error" : "Not Found"
     };
   }
 }
@@ -1562,12 +1563,12 @@ function redirect_response(status, location) {
   });
   return response;
 }
-function clarify_devalue_error(event, error2) {
+function clarify_devalue_error(event2, error2) {
   if (error2.path) {
-    return `Data returned from \`load\` while rendering ${event.route.id} is not serializable: ${error2.message} (data${error2.path})`;
+    return `Data returned from \`load\` while rendering ${event2.route.id} is not serializable: ${error2.message} (data${error2.path})`;
   }
   if (error2.path === "") {
-    return `Data returned from \`load\` while rendering ${event.route.id} is not a plain object`;
+    return `Data returned from \`load\` while rendering ${event2.route.id} is not a plain object`;
   }
   return error2.message;
 }
@@ -1587,10 +1588,10 @@ function stringify_uses(node) {
     uses.push(`"url":1`);
   return `"uses":{${uses.join(",")}}`;
 }
-async function render_endpoint(event, mod, state) {
+async function render_endpoint(event2, mod, state) {
   const method = (
     /** @type {import('types').HttpMethod} */
-    event.request.method
+    event2.request.method
   );
   let handler = mod[method];
   if (!handler && method === "HEAD") {
@@ -1605,7 +1606,7 @@ async function render_endpoint(event, mod, state) {
   }
   if (state.prerendering && !prerender) {
     if (state.depth > 0) {
-      throw new Error(`${event.route.id} is not prerenderable`);
+      throw new Error(`${event2.route.id} is not prerenderable`);
     } else {
       return new Response(void 0, { status: 204 });
     }
@@ -1613,11 +1614,11 @@ async function render_endpoint(event, mod, state) {
   try {
     const response = await handler(
       /** @type {import('types').RequestEvent<Record<string, any>>} */
-      event
+      event2
     );
     if (!(response instanceof Response)) {
       throw new Error(
-        `Invalid response from route ${event.url.pathname}: handler should return a Response object`
+        `Invalid response from route ${event2.url.pathname}: handler should return a Response object`
       );
     }
     if (state.prerendering) {
@@ -1634,14 +1635,14 @@ async function render_endpoint(event, mod, state) {
     throw e;
   }
 }
-function is_endpoint_request(event) {
-  const { method, headers } = event.request;
+function is_endpoint_request(event2) {
+  const { method, headers } = event2.request;
   if (method === "PUT" || method === "PATCH" || method === "DELETE" || method === "OPTIONS") {
     return true;
   }
   if (method === "POST" && headers.get("x-sveltekit-action") === "true")
     return false;
-  const accept = event.request.headers.get("accept") ?? "*/*";
+  const accept = event2.request.headers.get("accept") ?? "*/*";
   return negotiate(accept, ["*", "text/html"]) !== "text/html";
 }
 function compact(arr) {
@@ -1719,21 +1720,21 @@ function add_data_suffix(pathname) {
 function strip_data_suffix(pathname) {
   return pathname.slice(0, -DATA_SUFFIX.length);
 }
-function is_action_json_request(event) {
-  const accept = negotiate(event.request.headers.get("accept") ?? "*/*", [
+function is_action_json_request(event2) {
+  const accept = negotiate(event2.request.headers.get("accept") ?? "*/*", [
     "application/json",
     "text/html"
   ]);
-  return accept === "application/json" && event.request.method === "POST";
+  return accept === "application/json" && event2.request.method === "POST";
 }
-async function handle_action_json_request(event, options2, server2) {
+async function handle_action_json_request(event2, options2, server2) {
   const actions = server2?.actions;
   if (!actions) {
     const no_actions_error = error(405, "POST method not allowed. No actions exist for this page");
     return action_json(
       {
         type: "error",
-        error: await handle_error_and_jsonify(event, options2, no_actions_error)
+        error: await handle_error_and_jsonify(event2, options2, no_actions_error)
       },
       {
         status: no_actions_error.status,
@@ -1747,7 +1748,7 @@ async function handle_action_json_request(event, options2, server2) {
   }
   check_named_default_separate(actions);
   try {
-    const data = await call_action(event, actions);
+    const data = await call_action(event2, actions);
     if (false)
       ;
     if (data instanceof ActionFailure) {
@@ -1760,7 +1761,7 @@ async function handle_action_json_request(event, options2, server2) {
         data: stringify_action_response(
           data.data,
           /** @type {string} */
-          event.route.id
+          event2.route.id
         )
       });
     } else {
@@ -1771,7 +1772,7 @@ async function handle_action_json_request(event, options2, server2) {
         data: stringify_action_response(
           data,
           /** @type {string} */
-          event.route.id
+          event2.route.id
         )
       });
     }
@@ -1787,7 +1788,7 @@ async function handle_action_json_request(event, options2, server2) {
     return action_json(
       {
         type: "error",
-        error: await handle_error_and_jsonify(event, options2, check_incorrect_fail_use(err))
+        error: await handle_error_and_jsonify(event2, options2, check_incorrect_fail_use(err))
       },
       {
         status: err instanceof HttpError ? err.status : 500
@@ -1801,13 +1802,13 @@ function check_incorrect_fail_use(error2) {
 function action_json(data, init2) {
   return json(data, init2);
 }
-function is_action_request(event) {
-  return event.request.method === "POST";
+function is_action_request(event2) {
+  return event2.request.method === "POST";
 }
-async function handle_action_request(event, server2) {
+async function handle_action_request(event2, server2) {
   const actions = server2?.actions;
   if (!actions) {
-    event.setHeaders({
+    event2.setHeaders({
       // https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/405
       // "The server must generate an Allow header field in a 405 status code response"
       allow: "GET"
@@ -1819,7 +1820,7 @@ async function handle_action_request(event, server2) {
   }
   check_named_default_separate(actions);
   try {
-    const data = await call_action(event, actions);
+    const data = await call_action(event2, actions);
     if (false)
       ;
     if (data instanceof ActionFailure) {
@@ -1858,8 +1859,8 @@ function check_named_default_separate(actions) {
     );
   }
 }
-async function call_action(event, actions) {
-  const url2 = new URL(event.request.url);
+async function call_action(event2, actions) {
+  const url2 = new URL(event2.request.url);
   let name = "default";
   for (const param of url2.searchParams) {
     if (param[0].startsWith("/")) {
@@ -1874,12 +1875,12 @@ async function call_action(event, actions) {
   if (!action) {
     throw new Error(`No action with name '${name}' found`);
   }
-  if (!is_form_content_type(event.request)) {
+  if (!is_form_content_type(event2.request)) {
     throw new Error(
-      `Actions expect form-encoded data (received ${event.request.headers.get("content-type")})`
+      `Actions expect form-encoded data (received ${event2.request.headers.get("content-type")})`
     );
   }
-  return action(event);
+  return action(event2);
 }
 function uneval_action_response(data, route_id) {
   return try_deserialize(data, uneval, route_id);
@@ -1914,7 +1915,7 @@ async function unwrap_promises(object) {
   }
   return object;
 }
-async function load_server_data({ event, state, node, parent }) {
+async function load_server_data({ event: event2, state, node, parent }) {
   if (!node?.server)
     return null;
   const uses = {
@@ -1924,27 +1925,27 @@ async function load_server_data({ event, state, node, parent }) {
     route: false,
     url: false
   };
-  const url2 = make_trackable(event.url, () => {
+  const url2 = make_trackable(event2.url, () => {
     uses.url = true;
   });
   if (state.prerendering) {
     disable_search(url2);
   }
   const result = await node.server.load?.call(null, {
-    ...event,
+    ...event2,
     fetch: (info, init2) => {
-      const url22 = new URL(info instanceof Request ? info.url : info, event.url);
+      const url22 = new URL(info instanceof Request ? info.url : info, event2.url);
       uses.dependencies.add(url22.href);
-      return event.fetch(info, init2);
+      return event2.fetch(info, init2);
     },
     /** @param {string[]} deps */
     depends: (...deps) => {
       for (const dep of deps) {
-        const { href } = new URL(dep, event.url);
+        const { href } = new URL(dep, event2.url);
         uses.dependencies.add(href);
       }
     },
-    params: new Proxy(event.params, {
+    params: new Proxy(event2.params, {
       get: (target, key2) => {
         uses.params.add(key2);
         return target[
@@ -1957,7 +1958,7 @@ async function load_server_data({ event, state, node, parent }) {
       uses.parent = true;
       return parent();
     },
-    route: new Proxy(event.route, {
+    route: new Proxy(event2.route, {
       get: (target, key2) => {
         uses.route = true;
         return target[
@@ -1977,7 +1978,7 @@ async function load_server_data({ event, state, node, parent }) {
   };
 }
 async function load_data({
-  event,
+  event: event2,
   fetched,
   node,
   parent,
@@ -1991,12 +1992,12 @@ async function load_data({
     return server_data_node?.data ?? null;
   }
   const result = await node.universal.load.call(null, {
-    url: event.url,
-    params: event.params,
+    url: event2.url,
+    params: event2.params,
     data: server_data_node?.data ?? null,
-    route: event.route,
-    fetch: create_universal_fetch(event, state, fetched, csr, resolve_opts),
-    setHeaders: event.setHeaders,
+    route: event2.route,
+    fetch: create_universal_fetch(event2, state, fetched, csr, resolve_opts),
+    setHeaders: event2.setHeaders,
     depends: () => {
     },
     parent
@@ -2004,12 +2005,12 @@ async function load_data({
   const data = result ? await unwrap_promises(result) : null;
   return data;
 }
-function create_universal_fetch(event, state, fetched, csr, resolve_opts) {
+function create_universal_fetch(event2, state, fetched, csr, resolve_opts) {
   return async (input, init2) => {
     const cloned_body = input instanceof Request && input.body ? input.clone().body : null;
-    let response = await event.fetch(input, init2);
-    const url2 = new URL(input instanceof Request ? input.url : input, event.url);
-    const same_origin = url2.origin === event.url.origin;
+    let response = await event2.fetch(input, init2);
+    const url2 = new URL(input instanceof Request ? input.url : input, event2.url);
+    const same_origin = url2.origin === event2.url.origin;
     let dependency;
     if (same_origin) {
       if (state.prerendering) {
@@ -2026,7 +2027,7 @@ function create_universal_fetch(event, state, fetched, csr, resolve_opts) {
         });
       } else {
         const acao = response.headers.get("access-control-allow-origin");
-        if (!acao || acao !== event.url.origin && acao !== "*") {
+        if (!acao || acao !== event2.url.origin && acao !== "*") {
           throw new Error(
             `CORS error: ${acao ? "Incorrect" : "No"} 'Access-Control-Allow-Origin' header is present on the requested resource`
           );
@@ -2045,8 +2046,8 @@ function create_universal_fetch(event, state, fetched, csr, resolve_opts) {
               );
             }
             fetched.push({
-              url: same_origin ? url2.href.slice(event.url.origin.length) : url2.href,
-              method: event.request.method,
+              url: same_origin ? url2.href.slice(event2.url.origin.length) : url2.href,
+              method: event2.request.method,
               request_body: (
                 /** @type {string | ArrayBufferView | undefined} */
                 input instanceof Request && cloned_body ? await stream_to_string(cloned_body) : init2?.body
@@ -2090,7 +2091,7 @@ function create_universal_fetch(event, state, fetched, csr, resolve_opts) {
           const included = resolve_opts.filterSerializedResponseHeaders(lower, value);
           if (!included) {
             throw new Error(
-              `Failed to get response header "${lower}" \u2014 it must be included by the \`filterSerializedResponseHeaders\` option: https://kit.svelte.dev/docs/hooks#server-hooks-handle (at ${event.route.id})`
+              `Failed to get response header "${lower}" \u2014 it must be included by the \`filterSerializedResponseHeaders\` option: https://kit.svelte.dev/docs/hooks#server-hooks-handle (at ${event2.route.id})`
             );
           }
         }
@@ -2604,7 +2605,7 @@ async function render_response({
   page_config,
   status,
   error: error2 = null,
-  event,
+  event: event2,
   resolve_opts,
   action_result
 }) {
@@ -2628,7 +2629,7 @@ async function render_response({
   let assets$1 = assets;
   let base_expression = s(base);
   if (!state.prerendering?.fallback) {
-    const segments = event.url.pathname.slice(base.length).split("/");
+    const segments = event2.url.pathname.slice(base.length).split("/");
     if (segments.length === 1 && base !== "") {
       base$1 = `./${base.split("/").at(-1)}`;
       base_expression = `new URL(${s(base$1)}, location).pathname`;
@@ -2659,11 +2660,11 @@ async function render_response({
       error: error2,
       params: (
         /** @type {Record<string, any>} */
-        event.params
+        event2.params
       ),
-      route: event.route,
+      route: event2.route,
       status,
-      url: event.url,
+      url: event2.url,
       data: data2,
       form: form_value
     };
@@ -2739,7 +2740,7 @@ async function render_response({
   }
   const global = `__sveltekit_${options2.version_hash}`;
   const { data, chunks } = get_data(
-    event,
+    event2,
     options2,
     branch.map((b) => b.server_data),
     global
@@ -2795,7 +2796,7 @@ async function render_response({
         serialized.form = uneval_action_response(
           form_value,
           /** @type {string} */
-          event.route.id
+          event2.route.id
         );
       }
       if (error2) {
@@ -2811,7 +2812,7 @@ async function render_response({
         hydrate.push(`status: ${status}`);
       }
       if (options2.embedded) {
-        hydrate.push(`params: ${uneval(event.params)}`, `route: ${s(event.route)}`);
+        hydrate.push(`params: ${uneval(event2.params)}`, `route: ${s(event2.route)}`);
       }
       args.push(`{
 							${hydrate.join(",\n							")}
@@ -2909,7 +2910,7 @@ async function render_response({
     }
   );
 }
-function get_data(event, options2, nodes, global) {
+function get_data(event2, options2, nodes, global) {
   let promise_id = 1;
   let count = 0;
   const { iterator, push, done } = create_async_iterator();
@@ -2923,7 +2924,7 @@ function get_data(event, options2, nodes, global) {
       ).catch(
         /** @param {any} error */
         async (error2) => ({
-          error: await handle_error_and_jsonify(event, options2, error2)
+          error: await handle_error_and_jsonify(event2, options2, error2)
         })
       ).then(
         /**
@@ -2936,9 +2937,9 @@ function get_data(event, options2, nodes, global) {
             str = uneval({ id, data, error: error2 }, replacer);
           } catch (e) {
             error2 = await handle_error_and_jsonify(
-              event,
+              event2,
               options2,
-              new Error(`Failed to serialize promise while rendering ${event.route.id}`)
+              new Error(`Failed to serialize promise while rendering ${event2.route.id}`)
             );
             data = void 0;
             str = uneval({ id, data, error: error2 }, replacer);
@@ -2964,7 +2965,7 @@ function get_data(event, options2, nodes, global) {
     };
   } catch (e) {
     throw new Error(clarify_devalue_error(
-      event,
+      event2,
       /** @type {any} */
       e
     ));
@@ -2983,7 +2984,7 @@ function get_option(nodes, option) {
   );
 }
 async function respond_with_error({
-  event,
+  event: event2,
   options: options2,
   manifest: manifest2,
   state,
@@ -3000,14 +3001,14 @@ async function respond_with_error({
     if (ssr) {
       state.error = true;
       const server_data_promise = load_server_data({
-        event,
+        event: event2,
         state,
         node: default_layout,
         parent: async () => ({})
       });
       const server_data = await server_data_promise;
       const data = await load_data({
-        event,
+        event: event2,
         fetched,
         node: default_layout,
         parent: async () => ({}),
@@ -3039,10 +3040,10 @@ async function respond_with_error({
         csr: get_option([default_layout], "csr") ?? true
       },
       status,
-      error: await handle_error_and_jsonify(event, options2, error2),
+      error: await handle_error_and_jsonify(event2, options2, error2),
       branch,
       fetched,
-      event,
+      event: event2,
       resolve_opts
     });
   } catch (e) {
@@ -3052,7 +3053,7 @@ async function respond_with_error({
     return static_error_page(
       options2,
       e instanceof HttpError ? e.status : 500,
-      (await handle_error_and_jsonify(event, options2, e)).message
+      (await handle_error_and_jsonify(event2, options2, e)).message
     );
   }
 }
@@ -3068,7 +3069,7 @@ function once(fn) {
 }
 var INVALIDATED_PARAM = "x-sveltekit-invalidated";
 var encoder2 = new TextEncoder();
-async function render_data(event, route, options2, manifest2, state, invalidated_data_nodes, trailing_slash) {
+async function render_data(event2, route, options2, manifest2, state, invalidated_data_nodes, trailing_slash) {
   if (!route.page) {
     return new Response(void 0, {
       status: 404
@@ -3078,9 +3079,9 @@ async function render_data(event, route, options2, manifest2, state, invalidated
     const node_ids = [...route.page.layouts, route.page.leaf];
     const invalidated = invalidated_data_nodes ?? node_ids.map(() => true);
     let aborted = false;
-    const url2 = new URL(event.url);
+    const url2 = new URL(event2.url);
     url2.pathname = normalize_path(url2.pathname, trailing_slash);
-    const new_event = { ...event, url: url2 };
+    const new_event = { ...event2, url: url2 };
     const functions = node_ids.map((n, i) => {
       return once(async () => {
         try {
@@ -3140,14 +3141,14 @@ async function render_data(event, route, options2, manifest2, state, invalidated
             /** @type {import('types').ServerErrorNode} */
             {
               type: "error",
-              error: await handle_error_and_jsonify(event, options2, error2),
+              error: await handle_error_and_jsonify(event2, options2, error2),
               status: error2 instanceof HttpError ? error2.status : void 0
             }
           );
         })
       )
     );
-    const { data, chunks } = get_data_json(event, options2, nodes);
+    const { data, chunks } = get_data_json(event2, options2, nodes);
     if (!chunks) {
       return json_response(data);
     }
@@ -3176,7 +3177,7 @@ async function render_data(event, route, options2, manifest2, state, invalidated
     if (error2 instanceof Redirect) {
       return redirect_json_response(error2);
     } else {
-      return json_response(await handle_error_and_jsonify(event, options2, error2), 500);
+      return json_response(await handle_error_and_jsonify(event2, options2, error2), 500);
     }
   }
 }
@@ -3195,7 +3196,7 @@ function redirect_json_response(redirect) {
     location: redirect.location
   });
 }
-function get_data_json(event, options2, nodes) {
+function get_data_json(event2, options2, nodes) {
   let promise_id = 1;
   let count = 0;
   const { iterator, push, done } = create_async_iterator();
@@ -3211,7 +3212,7 @@ function get_data_json(event, options2, nodes) {
           async (e) => {
             key2 = "error";
             return handle_error_and_jsonify(
-              event,
+              event2,
               options2,
               /** @type {any} */
               e
@@ -3225,9 +3226,9 @@ function get_data_json(event, options2, nodes) {
               str = stringify(value, reducers);
             } catch (e) {
               const error2 = await handle_error_and_jsonify(
-                event,
+                event2,
                 options2,
-                new Error(`Failed to serialize promise while rendering ${event.route.id}`)
+                new Error(`Failed to serialize promise while rendering ${event2.route.id}`)
               );
               key2 = "error";
               str = stringify(error2, reducers);
@@ -3261,23 +3262,23 @@ function get_data_json(event, options2, nodes) {
     };
   } catch (e) {
     throw new Error(clarify_devalue_error(
-      event,
+      event2,
       /** @type {any} */
       e
     ));
   }
 }
 var MAX_DEPTH = 10;
-async function render_page(event, page2, options2, manifest2, state, resolve_opts) {
+async function render_page(event2, page2, options2, manifest2, state, resolve_opts) {
   if (state.depth > MAX_DEPTH) {
-    return text(`Not found: ${event.url.pathname}`, {
+    return text(`Not found: ${event2.url.pathname}`, {
       status: 404
       // TODO in some cases this should be 500. not sure how to differentiate
     });
   }
-  if (is_action_json_request(event)) {
+  if (is_action_json_request(event2)) {
     const node = await manifest2._.nodes[page2.leaf]();
-    return handle_action_json_request(event, options2, node?.server);
+    return handle_action_json_request(event2, options2, node?.server);
   }
   try {
     const nodes = await Promise.all([
@@ -3291,8 +3292,8 @@ async function render_page(event, page2, options2, manifest2, state, resolve_opt
     );
     let status = 200;
     let action_result = void 0;
-    if (is_action_request(event)) {
-      action_result = await handle_action_request(event, leaf_node.server);
+    if (is_action_request(event2)) {
+      action_result = await handle_action_request(event2, leaf_node.server);
       if (action_result?.type === "redirect") {
         return redirect_response(action_result.status, action_result.location);
       }
@@ -3305,7 +3306,7 @@ async function render_page(event, page2, options2, manifest2, state, resolve_opt
       }
     }
     const should_prerender_data = nodes.some((node) => node?.server);
-    const data_pathname = add_data_suffix(event.url.pathname);
+    const data_pathname = add_data_suffix(event2.url.pathname);
     const should_prerender = get_option(nodes, "prerender") ?? false;
     if (should_prerender) {
       const mod = leaf_node.server;
@@ -3329,7 +3330,7 @@ async function render_page(event, page2, options2, manifest2, state, resolve_opt
         },
         status,
         error: null,
-        event,
+        event: event2,
         options: options2,
         manifest: manifest2,
         state,
@@ -3348,7 +3349,7 @@ async function render_page(event, page2, options2, manifest2, state, resolve_opt
             throw action_result.error;
           }
           return await load_server_data({
-            event,
+            event: event2,
             state,
             node,
             parent: async () => {
@@ -3375,7 +3376,7 @@ async function render_page(event, page2, options2, manifest2, state, resolve_opt
       return Promise.resolve().then(async () => {
         try {
           return await load_data({
-            event,
+            event: event2,
             fetched,
             node,
             parent: async () => {
@@ -3426,7 +3427,7 @@ async function render_page(event, page2, options2, manifest2, state, resolve_opt
             return redirect_response(err.status, err.location);
           }
           const status2 = err instanceof HttpError ? err.status : 500;
-          const error2 = await handle_error_and_jsonify(event, options2, err);
+          const error2 = await handle_error_and_jsonify(event2, options2, err);
           while (i--) {
             if (page2.errors[i]) {
               const index4 = (
@@ -3438,7 +3439,7 @@ async function render_page(event, page2, options2, manifest2, state, resolve_opt
               while (!branch[j])
                 j -= 1;
               return await render_response({
-                event,
+                event: event2,
                 options: options2,
                 manifest: manifest2,
                 state,
@@ -3463,7 +3464,7 @@ async function render_page(event, page2, options2, manifest2, state, resolve_opt
     }
     if (state.prerendering && should_prerender_data) {
       let { data, chunks } = get_data_json(
-        event,
+        event2,
         options2,
         branch.map((node) => node?.server_data)
       );
@@ -3478,7 +3479,7 @@ async function render_page(event, page2, options2, manifest2, state, resolve_opt
       });
     }
     return await render_response({
-      event,
+      event: event2,
       options: options2,
       manifest: manifest2,
       state,
@@ -3495,7 +3496,7 @@ async function render_page(event, page2, options2, manifest2, state, resolve_opt
     });
   } catch (e) {
     return await respond_with_error({
-      event,
+      event: event2,
       options: options2,
       manifest: manifest2,
       state,
@@ -3669,30 +3670,30 @@ function add_cookies_to_headers(headers, cookies) {
     headers.append("set-cookie", (0, import_cookie.serialize)(name, value, options2));
   }
 }
-function create_fetch({ event, options: options2, manifest: manifest2, state, get_cookie_header }) {
+function create_fetch({ event: event2, options: options2, manifest: manifest2, state, get_cookie_header }) {
   return async (info, init2) => {
-    const original_request = normalize_fetch_input(info, init2, event.url);
+    const original_request = normalize_fetch_input(info, init2, event2.url);
     const request_body = init2?.body;
     let mode = (info instanceof Request ? info.mode : init2?.mode) ?? "cors";
     let credentials = (info instanceof Request ? info.credentials : init2?.credentials) ?? "same-origin";
     return await options2.hooks.handleFetch({
-      event,
+      event: event2,
       request: original_request,
       fetch: async (info2, init3) => {
-        const request = normalize_fetch_input(info2, init3, event.url);
+        const request = normalize_fetch_input(info2, init3, event2.url);
         const url2 = new URL(request.url);
         if (!request.headers.has("origin")) {
-          request.headers.set("origin", event.url.origin);
+          request.headers.set("origin", event2.url.origin);
         }
         if (info2 !== original_request) {
           mode = (info2 instanceof Request ? info2.mode : init3?.mode) ?? "cors";
           credentials = (info2 instanceof Request ? info2.credentials : init3?.credentials) ?? "same-origin";
         }
-        if ((request.method === "GET" || request.method === "HEAD") && (mode === "no-cors" && url2.origin !== event.url.origin || url2.origin === event.url.origin)) {
+        if ((request.method === "GET" || request.method === "HEAD") && (mode === "no-cors" && url2.origin !== event2.url.origin || url2.origin === event2.url.origin)) {
           request.headers.delete("origin");
         }
-        if (url2.origin !== event.url.origin) {
-          if (`.${url2.hostname}`.endsWith(`.${event.url.hostname}`) && credentials !== "omit") {
+        if (url2.origin !== event2.url.origin) {
+          if (`.${url2.hostname}`.endsWith(`.${event2.url.hostname}`) && credentials !== "omit") {
             const cookie = get_cookie_header(url2, request.headers.get("cookie"));
             if (cookie)
               request.headers.set("cookie", cookie);
@@ -3721,7 +3722,7 @@ function create_fetch({ event, options: options2, manifest: manifest2, state, ge
           if (cookie) {
             request.headers.set("cookie", cookie);
           }
-          const authorization = event.request.headers.get("authorization");
+          const authorization = event2.request.headers.get("authorization");
           if (authorization && !request.headers.has("authorization")) {
             request.headers.set("authorization", authorization);
           }
@@ -3736,7 +3737,7 @@ function create_fetch({ event, options: options2, manifest: manifest2, state, ge
           request.headers.set(
             "accept-language",
             /** @type {string} */
-            event.request.headers.get("accept-language")
+            event2.request.headers.get("accept-language")
           );
         }
         response = await respond(request, options2, manifest2, {
@@ -3747,7 +3748,7 @@ function create_fetch({ event, options: options2, manifest: manifest2, state, ge
         if (set_cookie) {
           for (const str of set_cookie_parser.splitCookiesString(set_cookie)) {
             const { name, value, ...options3 } = set_cookie_parser.parseString(str);
-            event.cookies.set(
+            event2.cookies.set(
               name,
               value,
               /** @type {import('cookie').CookieSerializeOptions} */
@@ -3873,7 +3874,7 @@ async function respond(request, options2, manifest2, state) {
   let trailing_slash = void 0;
   const headers = {};
   let cookies_to_add = {};
-  const event = {
+  const event2 = {
     // @ts-expect-error `cookies` and `fetch` need to be created after the `event` itself
     cookies: null,
     // @ts-expect-error
@@ -3952,13 +3953,13 @@ async function respond(request, options2, manifest2, state) {
       trailing_slash ?? "never"
     );
     cookies_to_add = new_cookies;
-    event.cookies = cookies;
-    event.fetch = create_fetch({ event, options: options2, manifest: manifest2, state, get_cookie_header });
+    event2.cookies = cookies;
+    event2.fetch = create_fetch({ event: event2, options: options2, manifest: manifest2, state, get_cookie_header });
     if (state.prerendering && !state.prerendering.fallback)
       disable_search(url2);
     const response = await options2.hooks.handle({
-      event,
-      resolve: (event2, opts) => resolve(event2, opts).then((response2) => {
+      event: event2,
+      resolve: (event22, opts) => resolve(event22, opts).then((response2) => {
         for (const key2 in headers) {
           const value = headers[key2];
           response2.headers.set(
@@ -3968,8 +3969,8 @@ async function respond(request, options2, manifest2, state) {
           );
         }
         add_cookies_to_headers(response2.headers, Object.values(cookies_to_add));
-        if (state.prerendering && event2.route.id !== null) {
-          response2.headers.set("x-sveltekit-routeid", encodeURI(event2.route.id));
+        if (state.prerendering && event22.route.id !== null) {
+          response2.headers.set("x-sveltekit-routeid", encodeURI(event22.route.id));
         }
         return response2;
       })
@@ -4020,9 +4021,9 @@ async function respond(request, options2, manifest2, state) {
       add_cookies_to_headers(response.headers, Object.values(cookies_to_add));
       return response;
     }
-    return await handle_fatal_error(event, options2, e);
+    return await handle_fatal_error(event2, options2, e);
   }
-  async function resolve(event2, opts) {
+  async function resolve(event22, opts) {
     try {
       if (opts) {
         if ("ssr" in opts) {
@@ -4038,7 +4039,7 @@ async function respond(request, options2, manifest2, state) {
       }
       if (state.prerendering?.fallback) {
         return await render_response({
-          event: event2,
+          event: event22,
           options: options2,
           manifest: manifest2,
           state,
@@ -4054,7 +4055,7 @@ async function respond(request, options2, manifest2, state) {
         let response;
         if (is_data_request) {
           response = await render_data(
-            event2,
+            event22,
             route,
             options2,
             manifest2,
@@ -4062,10 +4063,10 @@ async function respond(request, options2, manifest2, state) {
             invalidated_data_nodes,
             trailing_slash ?? "never"
           );
-        } else if (route.endpoint && (!route.page || is_endpoint_request(event2))) {
-          response = await render_endpoint(event2, await route.endpoint(), state);
+        } else if (route.endpoint && (!route.page || is_endpoint_request(event22))) {
+          response = await render_endpoint(event22, await route.endpoint(), state);
         } else if (route.page) {
-          response = await render_page(event2, route.page, options2, manifest2, state, resolve_opts);
+          response = await render_page(event22, route.page, options2, manifest2, state, resolve_opts);
         } else {
           throw new Error("This should never happen");
         }
@@ -4078,12 +4079,12 @@ async function respond(request, options2, manifest2, state) {
       }
       if (state.depth === 0) {
         return await respond_with_error({
-          event: event2,
+          event: event22,
           options: options2,
           manifest: manifest2,
           state,
           status: 404,
-          error: new Error(`Not found: ${event2.url.pathname}`),
+          error: new Error(`Not found: ${event22.url.pathname}`),
           resolve_opts
         });
       }
@@ -4092,12 +4093,12 @@ async function respond(request, options2, manifest2, state) {
       }
       return await fetch(request);
     } catch (e) {
-      return await handle_fatal_error(event2, options2, e);
+      return await handle_fatal_error(event22, options2, e);
     } finally {
-      event2.cookies.set = () => {
+      event22.cookies.set = () => {
         throw new Error("Cannot use `cookies.set(...)` after the response has been generated");
       };
-      event2.setHeaders = () => {
+      event22.setHeaders = () => {
         throw new Error("Cannot use `setHeaders(...)` after the response has been generated");
       };
     }
@@ -4128,7 +4129,7 @@ var Server = class {
     if (!__privateGet(this, _options).hooks) {
       const module = await get_hooks();
       __privateGet(this, _options).hooks = {
-        handle: module.handle || (({ event, resolve }) => resolve(event)),
+        handle: module.handle || (({ event: event2, resolve }) => resolve(event2)),
         // @ts-expect-error
         handleError: module.handleError || (({ error: error2 }) => console.error(error2?.stack)),
         handleFetch: module.handleFetch || (({ request, fetch: fetch2 }) => fetch2(request))
@@ -4162,7 +4163,7 @@ var manifest = {
   assets: /* @__PURE__ */ new Set(["favicon.png"]),
   mimeTypes: { ".png": "image/png" },
   _: {
-    client: { "start": { "file": "_app/immutable/entry/start.ee154863.js", "imports": ["_app/immutable/entry/start.ee154863.js", "_app/immutable/chunks/index.e3c2d60e.js", "_app/immutable/chunks/singletons.58d9408a.js"], "stylesheets": [], "fonts": [] }, "app": { "file": "_app/immutable/entry/app.53a35a79.js", "imports": ["_app/immutable/entry/app.53a35a79.js", "_app/immutable/chunks/index.e3c2d60e.js"], "stylesheets": [], "fonts": [] } },
+    client: { "start": { "file": "_app/immutable/entry/start.33a08471.js", "imports": ["_app/immutable/entry/start.33a08471.js", "_app/immutable/chunks/index.e3c2d60e.js", "_app/immutable/chunks/singletons.70d4f7c5.js"], "stylesheets": [], "fonts": [] }, "app": { "file": "_app/immutable/entry/app.901caa19.js", "imports": ["_app/immutable/entry/app.901caa19.js", "_app/immutable/chunks/index.e3c2d60e.js"], "stylesheets": [], "fonts": [] } },
     nodes: [
       () => Promise.resolve().then(() => (init__(), __exports)),
       () => Promise.resolve().then(() => (init__2(), __exports2)),
