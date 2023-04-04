@@ -1,3 +1,32 @@
+import { json } from "@sveltejs/kit";
+
+export async function GET({ request }) {
+  try {
+    const location = {
+      ip: getClientAddress(),
+      city: decodeURIComponent(
+        request.headers.get("x-vercel-ip-city") ?? "unknown"
+      ),
+      region: decodeURIComponent(
+        request.headers.get("x-vercel-ip-country-region") ?? "unknown"
+      ),
+      country: decodeURIComponent(
+        request.headers.get("x-vercel-ip-country") ?? "unknown"
+      ),
+      lat: decodeURIComponent(
+        request.headers.get("x-vercel-ip-latitude") ?? "unknown"
+      ),
+      lon: decodeURIComponent(
+        request.headers.get("x-vercel-ip-longitude") ?? "unknown"
+      ),
+    };
+
+    return json(location);
+  } catch (error) {
+    console.log("load error:", error);
+  }
+}
+
 // import { json } from '@sveltejs/kit';
 // export async function GET(event) {
 // 	const ip = event.getClientAddress();
@@ -11,7 +40,7 @@
 // 	const timezone = decodeURIComponent(event.request.headers.get('x-vercel-ip-timezone') ?? 'unknown');
 
 // 	return json({
-// 		ip, 
+// 		ip,
 //     real_ip,
 // 		forwarded,
 //     // v_forwarded,
@@ -24,4 +53,3 @@
 // 		now: new Date().toISOString(),
 // 	});
 // }
-

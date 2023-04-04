@@ -1,7 +1,9 @@
 
 <script>
   export let data;
-  console.log('ip', data);
+  console.log('page', data);
+  const { location } = data;
+
 </script>
 
   <div class="my_page">
@@ -11,20 +13,10 @@
 
     <!-- <p>Browser: {data?.browser }</p> -->
 
-    <div class="location_name">
-      <div class="city">{data?.city}</div>
-      <div class="ip">{data?.ip}</div>
-      <!-- <div class="region">{data?.country_region}</div>
-      <div class="country">{data?.country}</div>
-      <div class="timezone">{data?.timezone}</div>
-      <div class="lat">{data?.latitude},</div>
-      <div class="lon">{data?.longitude}</div>
-      <div>ip:</div>
-      <div class="ip">{data?.ip}</div>
-      <div>real_ip:</div>
-      <div class="real_ip">{data?.real_ip}</div>
-      <div>forwarded:</div>
-      <div class="forwarded">{data?.forwarded}</div> -->
+    <div class="grid">
+      <div class="location">{location?.city}, {location?.region} {@html '&emsp;'} {location?.country}</div>
+      <div class="gps">{location?.lat}, {location?.lon}</div>
+      <div class="ip">{location?.ip}</div>
     </div>
   </div>
 
@@ -38,11 +30,11 @@
     margin:5vh auto;
   }
 
-  .location_name {
-    display: grid;
+  .grid {
+    /* display: grid;
     grid-template-columns: max-content max-content;
     align-items: center;
-    gap: 0 1rem;
+    gap: 0 1rem; */
   }
 
 </style>

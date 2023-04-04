@@ -1,37 +1,35 @@
-// import { geolocation } from '@vercel/edge';
- 
-// export const config = {
-//   runtime: 'edge',
-// };
- 
-// export async function load({event,request}) {
-//   const { city } = geolocation(request);
-//   // You can also get the city using dot notation on the function
-//   // const city = geolocation(request).city;
-//   return { city };
-// }
+import { dev } from "$app/environment";
 
-// import { geolocation, ipAddress  } from '@vercel/edge';
- 
-// export const config = {
-//   runtime: 'edge',
-// };
+let url;
 
-export async function load({event,request}) {
-  // const ip = ipAddress(request) || 'unknown';
-  // const { city } = geolocation(request) || 'unknown';
-  // console.log(ip);
-  const ip = request.headers.get('x-real-ip');
-  const city = request.headers.get('x-vercel-ip-city');
-
-  console.log(ip);
-
-  return {
-    city, ip
-  }
+if (dev) {
+  url = "/api/ipapi";
+} else {
+  url = "/api/geo";
 }
 
+export async function load({ fetch }) {
+  const res = await fetch(url);
+  const location = await res.json();
+
+  return {
+    location,
+  };
+}
+
+// export async function load({event,request}) {
+//   const ip = request.headers.get('x-real-ip');
+//   const city = request.headers.get('x-vercel-ip-city');
+
+//   console.log(ip);
+
+//   return {
+//     city, ip
+//   }
+// }
+
 // export async function load(event) {
+
 // 	const ip = event.getClientAddress();
 // 	const real_ip = decodeURIComponent(event.request.headers.get('x-real-ip') ?? 'unknown');
 // 	const forwarded = decodeURIComponent(event.request.headers.get('x-forwarded-for') ?? 'unknown');
@@ -41,10 +39,9 @@ export async function load({event,request}) {
 // 	const country = decodeURIComponent(event.request.headers.get('x-vercel-ip-country') ?? 'unknown');
 // 	const country_region = decodeURIComponent(event.request.headers.get('x-vercel-ip-country-region') ?? 'unknown');
 // 	const timezone = decodeURIComponent(event.request.headers.get('x-vercel-ip-timezone') ?? 'unknown');
-  
 
 // 	return {
-// 		ip, 
+// 		ip,
 //     real_ip,
 // 		forwarded,
 // 		city,
@@ -56,5 +53,3 @@ export async function load({event,request}) {
 // 		now: new Date().toISOString(),
 // 	};
 // }
-
-
