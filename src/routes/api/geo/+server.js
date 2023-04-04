@@ -1,6 +1,6 @@
 import { json } from '@sveltejs/kit';
 export async function GET({request}) {
-	const ip = event.getClientAddress();
+	const ip = request.getClientAddress();
 	const real_ip = decodeURIComponent(request.headers.get('x-real-ip') ?? 'unknown');
 	const forwarded = decodeURIComponent(request.headers.get('x-forwarded-for') ?? 'unknown');
 	const city = decodeURIComponent(request.headers.get('x-vercel-ip-city') ?? 'unknown');
@@ -18,6 +18,6 @@ export async function GET({request}) {
     lat,
     lon
   }
-  
+
 	return json(location);
 }
