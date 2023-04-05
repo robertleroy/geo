@@ -1,13 +1,15 @@
 
 <script>
   export let data;
-  console.log('page', data);
+  // console.log('page', data);
   const { location } = data;
 
 </script>
 
   <div class="my_page">
 	<!-- <Details city={data.city} ip={data.ip} /> -->
+
+  <div class="host">{data.host}</div>
 
   <div class="location">
 

@@ -566,20 +566,21 @@ var layout_server_exports = {};
 __export(layout_server_exports, {
   load: () => load
 });
-async function load({ fetch: fetch2 }) {
-  const res = await fetch2(url);
+async function load({ fetch: fetch2, url }) {
+  const res = await fetch2(ipurl);
   const location = await res.json();
   return {
+    host: url.hostname,
     now: (/* @__PURE__ */ new Date()).toISOString(),
-    dev: url,
+    dev: ipurl,
     location
   };
 }
-var url;
+var ipurl;
 var init_layout_server = __esm({
   ".svelte-kit/output/server/entries/pages/_layout.server.js"() {
     {
-      url = "/api/geo";
+      ipurl = "/api/geo";
     }
   }
 });
@@ -589,7 +590,7 @@ var layout_svelte_exports = {};
 __export(layout_svelte_exports, {
   default: () => Layout
 });
-var css, title, Layout;
+var css, Layout;
 var init_layout_svelte = __esm({
   ".svelte-kit/output/server/entries/pages/_layout.svelte.js"() {
     init_index2();
@@ -597,11 +598,10 @@ var init_layout_svelte = __esm({
       code: "header.svelte-1hmy21k.svelte-1hmy21k{border-bottom:1px solid #ccc}header.svelte-1hmy21k .flex.svelte-1hmy21k{display:flex;justify-content:space-between;align-items:center;gap:0 1rem;padding:0.5rem 2rem;max-width:var(--max-width);margin:0 auto}header.svelte-1hmy21k nav.svelte-1hmy21k{display:flex;align-items:baseline;gap:0 1rem}.router.svelte-1hmy21k.svelte-1hmy21k{padding:0.5rem 2rem;max-width:var(--max-width);margin:0 auto}",
       map: null
     };
-    title = "Home";
     Layout = create_ssr_component(($$result, $$props, $$bindings, slots) => {
       const routes = [{ name: "Home", path: "/" }];
       $$result.css.add(css);
-      return `<header class=" svelte-1hmy21k"><div class="flex svelte-1hmy21k"><div class="title"><a href="/">${escape(title)}</a></div>
+      return `<header class=" svelte-1hmy21k"><div class="flex svelte-1hmy21k"><div class="title"><a href="https://geo-nine-teal.vercel.app/" target="_blank" rel="noopener noreferrer">Vercel App</a></div>
     <nav class="svelte-1hmy21k">${each(routes, (route) => {
         return `<div class="route"><a${add_attribute("href", route.path, 0)}>${escape(route.name)}</a>
       </div>`;
@@ -631,9 +631,9 @@ var init__ = __esm({
     init_layout_server();
     index = 0;
     component = async () => (await Promise.resolve().then(() => (init_layout_svelte(), layout_svelte_exports))).default;
-    file = "_app/immutable/entry/_layout.svelte.05344707.js";
+    file = "_app/immutable/entry/_layout.svelte.a6e22f7a.js";
     server_id = "src/routes/+layout.server.js";
-    imports = ["_app/immutable/entry/_layout.svelte.05344707.js", "_app/immutable/chunks/index.e3c2d60e.js"];
+    imports = ["_app/immutable/entry/_layout.svelte.a6e22f7a.js", "_app/immutable/chunks/index.e3c2d60e.js"];
     stylesheets = ["_app/immutable/assets/_layout.f619b31a.css"];
     fonts = [];
   }
@@ -692,8 +692,8 @@ var init__2 = __esm({
   ".svelte-kit/output/server/nodes/1.js"() {
     index2 = 1;
     component2 = async () => (await Promise.resolve().then(() => (init_error_svelte(), error_svelte_exports))).default;
-    file2 = "_app/immutable/entry/error.svelte.99109706.js";
-    imports2 = ["_app/immutable/entry/error.svelte.99109706.js", "_app/immutable/chunks/index.e3c2d60e.js", "_app/immutable/chunks/singletons.07b06ab2.js"];
+    file2 = "_app/immutable/entry/error.svelte.d3bcb905.js";
+    imports2 = ["_app/immutable/entry/error.svelte.d3bcb905.js", "_app/immutable/chunks/index.e3c2d60e.js", "_app/immutable/chunks/singletons.41783752.js"];
     stylesheets2 = [];
     fonts2 = [];
   }
@@ -721,12 +721,13 @@ var init_page_svelte = __esm({
     };
     Page = create_ssr_component(($$result, $$props, $$bindings, slots) => {
       let { data } = $$props;
-      console.log("page", data);
       const { location } = data;
       if ($$props.data === void 0 && $$bindings.data && data !== void 0)
         $$bindings.data(data);
       $$result.css.add(css2);
       return `<div class="my_page svelte-gln0v9">
+
+  <div class="host">${escape(data.host)}</div>
 
   <div class="location">
 
@@ -762,9 +763,9 @@ var init__3 = __esm({
     init_page();
     index3 = 2;
     component3 = async () => (await Promise.resolve().then(() => (init_page_svelte(), page_svelte_exports))).default;
-    file3 = "_app/immutable/entry/_page.svelte.b69ef2b4.js";
+    file3 = "_app/immutable/entry/_page.svelte.ffca1623.js";
     universal_id = "src/routes/+page.js";
-    imports3 = ["_app/immutable/entry/_page.svelte.b69ef2b4.js", "_app/immutable/chunks/index.e3c2d60e.js", "_app/immutable/entry/_page.js.4ed993c7.js"];
+    imports3 = ["_app/immutable/entry/_page.svelte.ffca1623.js", "_app/immutable/chunks/index.e3c2d60e.js", "_app/immutable/entry/_page.js.4ed993c7.js"];
     stylesheets3 = ["_app/immutable/assets/_page.b34a2226.css"];
     fonts3 = [];
   }
@@ -810,7 +811,6 @@ async function GET2() {
   try {
     const getIp = await fetch("http://ip-api.com/json?fields=57855");
     const ipData = await getIp.json();
-    console.log("ipData", ipData);
     const location = await {
       ip: ipData?.query,
       city: ipData?.city,
@@ -994,7 +994,7 @@ var options = {
 		<div class="error">
 			<span class="status">` + status + '</span>\n			<div class="message">\n				<h1>' + message + "</h1>\n			</div>\n		</div>\n	</body>\n</html>\n"
   },
-  version_hash: "1u5kpp5"
+  version_hash: "17bqb92"
 };
 function get_hooks() {
   return {};
@@ -1671,8 +1671,8 @@ function decode_params(params) {
   return params;
 }
 var tracked_url_properties = ["href", "pathname", "search", "searchParams", "toString", "toJSON"];
-function make_trackable(url2, callback) {
-  const tracked = new URL(url2);
+function make_trackable(url, callback) {
+  const tracked = new URL(url);
   for (const property of tracked_url_properties) {
     let value = tracked[property];
     Object.defineProperty(tracked, property, {
@@ -1686,14 +1686,14 @@ function make_trackable(url2, callback) {
   }
   {
     tracked[Symbol.for("nodejs.util.inspect.custom")] = (depth, opts, inspect) => {
-      return inspect(url2, opts);
+      return inspect(url, opts);
     };
   }
   disable_hash(tracked);
   return tracked;
 }
-function disable_hash(url2) {
-  Object.defineProperty(url2, "hash", {
+function disable_hash(url) {
+  Object.defineProperty(url, "hash", {
     get() {
       throw new Error(
         "Cannot access event.url.hash. Consider using `$page.url.hash` inside a component instead"
@@ -1701,9 +1701,9 @@ function disable_hash(url2) {
     }
   });
 }
-function disable_search(url2) {
+function disable_search(url) {
   for (const property of ["search", "searchParams"]) {
-    Object.defineProperty(url2, property, {
+    Object.defineProperty(url, property, {
       get() {
         throw new Error(`Cannot access url.${property} on a page with prerendering enabled`);
       }
@@ -1860,9 +1860,9 @@ function check_named_default_separate(actions) {
   }
 }
 async function call_action(event, actions) {
-  const url2 = new URL(event.request.url);
+  const url = new URL(event.request.url);
   let name = "default";
-  for (const param of url2.searchParams) {
+  for (const param of url.searchParams) {
     if (param[0].startsWith("/")) {
       name = param[0].slice(1);
       if (name === "default") {
@@ -1925,17 +1925,17 @@ async function load_server_data({ event, state, node, parent }) {
     route: false,
     url: false
   };
-  const url2 = make_trackable(event.url, () => {
+  const url = make_trackable(event.url, () => {
     uses.url = true;
   });
   if (state.prerendering) {
-    disable_search(url2);
+    disable_search(url);
   }
   const result = await node.server.load?.call(null, {
     ...event,
     fetch: (info, init2) => {
-      const url22 = new URL(info instanceof Request ? info.url : info, event.url);
-      uses.dependencies.add(url22.href);
+      const url2 = new URL(info instanceof Request ? info.url : info, event.url);
+      uses.dependencies.add(url2.href);
       return event.fetch(info, init2);
     },
     /** @param {string[]} deps */
@@ -1967,7 +1967,7 @@ async function load_server_data({ event, state, node, parent }) {
         ];
       }
     }),
-    url: url2
+    url
   });
   const data = result ? await unwrap_promises(result) : null;
   return {
@@ -2009,13 +2009,13 @@ function create_universal_fetch(event, state, fetched, csr, resolve_opts) {
   return async (input, init2) => {
     const cloned_body = input instanceof Request && input.body ? input.clone().body : null;
     let response = await event.fetch(input, init2);
-    const url2 = new URL(input instanceof Request ? input.url : input, event.url);
-    const same_origin = url2.origin === event.url.origin;
+    const url = new URL(input instanceof Request ? input.url : input, event.url);
+    const same_origin = url.origin === event.url.origin;
     let dependency;
     if (same_origin) {
       if (state.prerendering) {
         dependency = { response, body: null };
-        state.prerendering.dependencies.set(url2.pathname, dependency);
+        state.prerendering.dependencies.set(url.pathname, dependency);
       }
     } else {
       const mode = input instanceof Request ? input.mode : init2?.mode ?? "cors";
@@ -2046,7 +2046,7 @@ function create_universal_fetch(event, state, fetched, csr, resolve_opts) {
               );
             }
             fetched.push({
-              url: same_origin ? url2.href.slice(event.url.origin.length) : url2.href,
+              url: same_origin ? url.href.slice(event.url.origin.length) : url.href,
               method: event.request.method,
               request_body: (
                 /** @type {string | ArrayBufferView | undefined} */
@@ -2676,12 +2676,12 @@ async function render_response({
       }
     }
     for (const { node } of branch) {
-      for (const url2 of node.imports)
-        modulepreloads.add(url2);
-      for (const url2 of node.stylesheets)
-        stylesheets4.add(url2);
-      for (const url2 of node.fonts)
-        fonts4.add(url2);
+      for (const url of node.imports)
+        modulepreloads.add(url);
+      for (const url of node.stylesheets)
+        stylesheets4.add(url);
+      for (const url of node.fonts)
+        fonts4.add(url);
       if (node.inline_styles) {
         Object.entries(await node.inline_styles()).forEach(([k, v]) => inline_styles.set(k, v));
       }
@@ -3079,9 +3079,9 @@ async function render_data(event, route, options2, manifest2, state, invalidated
     const node_ids = [...route.page.layouts, route.page.leaf];
     const invalidated = invalidated_data_nodes ?? node_ids.map(() => true);
     let aborted = false;
-    const url2 = new URL(event.url);
-    url2.pathname = normalize_path(url2.pathname, trailing_slash);
-    const new_event = { ...event, url: url2 };
+    const url = new URL(event.url);
+    url.pathname = normalize_path(url.pathname, trailing_slash);
+    const new_event = { ...event, url };
     const functions = node_ids.map((n, i) => {
       return once(async () => {
         try {
@@ -3542,16 +3542,16 @@ function exec(match, params, matchers) {
     return;
   return result;
 }
-function get_cookies(request, url2, trailing_slash) {
+function get_cookies(request, url, trailing_slash) {
   const header = request.headers.get("cookie") ?? "";
   const initial_cookies = (0, import_cookie.parse)(header, { decode: (value) => value });
-  const normalized_url = normalize_path(url2.pathname, trailing_slash);
+  const normalized_url = normalize_path(url.pathname, trailing_slash);
   const default_path = normalized_url.split("/").slice(0, -1).join("/") || "/";
   const new_cookies = {};
   const defaults = {
     httpOnly: true,
     sameSite: "lax",
-    secure: url2.hostname === "localhost" && url2.protocol === "http:" ? false : true
+    secure: url.hostname === "localhost" && url.protocol === "http:" ? false : true
   };
   const cookies = {
     // The JSDoc param annotations appearing below for get, set and delete
@@ -3564,7 +3564,7 @@ function get_cookies(request, url2, trailing_slash) {
      */
     get(name, opts) {
       const c = new_cookies[name];
-      if (c && domain_matches(url2.hostname, c.options.domain) && path_matches(url2.pathname, c.options.path)) {
+      if (c && domain_matches(url.hostname, c.options.domain) && path_matches(url.pathname, c.options.path)) {
         return c.value;
       }
       const decoder = opts?.decode || decodeURIComponent;
@@ -3579,7 +3579,7 @@ function get_cookies(request, url2, trailing_slash) {
       const decoder = opts?.decode || decodeURIComponent;
       const cookies2 = (0, import_cookie.parse)(header, { decode: decoder });
       for (const c of Object.values(new_cookies)) {
-        if (domain_matches(url2.hostname, c.options.domain) && path_matches(url2.pathname, c.options.path)) {
+        if (domain_matches(url.hostname, c.options.domain) && path_matches(url.pathname, c.options.path)) {
           cookies2[c.name] = c.value;
         }
       }
@@ -3681,7 +3681,7 @@ function create_fetch({ event, options: options2, manifest: manifest2, state, ge
       request: original_request,
       fetch: async (info2, init3) => {
         const request = normalize_fetch_input(info2, init3, event.url);
-        const url2 = new URL(request.url);
+        const url = new URL(request.url);
         if (!request.headers.has("origin")) {
           request.headers.set("origin", event.url.origin);
         }
@@ -3689,12 +3689,12 @@ function create_fetch({ event, options: options2, manifest: manifest2, state, ge
           mode = (info2 instanceof Request ? info2.mode : init3?.mode) ?? "cors";
           credentials = (info2 instanceof Request ? info2.credentials : init3?.credentials) ?? "same-origin";
         }
-        if ((request.method === "GET" || request.method === "HEAD") && (mode === "no-cors" && url2.origin !== event.url.origin || url2.origin === event.url.origin)) {
+        if ((request.method === "GET" || request.method === "HEAD") && (mode === "no-cors" && url.origin !== event.url.origin || url.origin === event.url.origin)) {
           request.headers.delete("origin");
         }
-        if (url2.origin !== event.url.origin) {
-          if (`.${url2.hostname}`.endsWith(`.${event.url.hostname}`) && credentials !== "omit") {
-            const cookie = get_cookie_header(url2, request.headers.get("cookie"));
+        if (url.origin !== event.url.origin) {
+          if (`.${url.hostname}`.endsWith(`.${event.url.hostname}`) && credentials !== "omit") {
+            const cookie = get_cookie_header(url, request.headers.get("cookie"));
             if (cookie)
               request.headers.set("cookie", cookie);
           }
@@ -3702,7 +3702,7 @@ function create_fetch({ event, options: options2, manifest: manifest2, state, ge
         }
         let response;
         const prefix = assets || base;
-        const decoded = decodeURIComponent(url2.pathname);
+        const decoded = decodeURIComponent(url.pathname);
         const filename = (decoded.startsWith(prefix) ? decoded.slice(prefix.length) : decoded).slice(1);
         const filename_html = `${filename}/index.html`;
         const is_asset = manifest2.assets.has(filename);
@@ -3718,7 +3718,7 @@ function create_fetch({ event, options: options2, manifest: manifest2, state, ge
           return await fetch(request);
         }
         if (credentials !== "omit") {
-          const cookie = get_cookie_header(url2, request.headers.get("cookie"));
+          const cookie = get_cookie_header(url, request.headers.get("cookie"));
           if (cookie) {
             request.headers.set("cookie", cookie);
           }
@@ -3761,11 +3761,11 @@ function create_fetch({ event, options: options2, manifest: manifest2, state, ge
     });
   };
 }
-function normalize_fetch_input(info, init2, url2) {
+function normalize_fetch_input(info, init2, url) {
   if (info instanceof Request) {
     return info;
   }
-  return new Request(typeof info === "string" ? new URL(info, url2) : info, init2);
+  return new Request(typeof info === "string" ? new URL(info, url) : info, init2);
 }
 function validator(expected) {
   const set = new Set(expected);
@@ -3824,9 +3824,9 @@ var default_transform = ({ html }) => html;
 var default_filter = () => false;
 var default_preload = ({ type }) => type === "js" || type === "css";
 async function respond(request, options2, manifest2, state) {
-  let url2 = new URL(request.url);
+  let url = new URL(request.url);
   if (options2.csrf_check_origin) {
-    const forbidden = request.method === "POST" && request.headers.get("origin") !== url2.origin && is_form_content_type(request);
+    const forbidden = request.method === "POST" && request.headers.get("origin") !== url.origin && is_form_content_type(request);
     if (forbidden) {
       const csrf_error = error(403, `Cross-site ${request.method} form submissions are forbidden`);
       if (request.headers.get("accept") === "application/json") {
@@ -3837,7 +3837,7 @@ async function respond(request, options2, manifest2, state) {
   }
   let decoded;
   try {
-    decoded = decode_pathname(url2.pathname);
+    decoded = decode_pathname(url.pathname);
   } catch {
     return text("Malformed URI", { status: 400 });
   }
@@ -3853,9 +3853,9 @@ async function respond(request, options2, manifest2, state) {
   let invalidated_data_nodes;
   if (is_data_request) {
     decoded = strip_data_suffix(decoded) || "/";
-    url2.pathname = strip_data_suffix(url2.pathname) || "/";
-    invalidated_data_nodes = url2.searchParams.get(INVALIDATED_PARAM)?.split("_").map(Boolean);
-    url2.searchParams.delete(INVALIDATED_PARAM);
+    url.pathname = strip_data_suffix(url.pathname) || "/";
+    invalidated_data_nodes = url.searchParams.get(INVALIDATED_PARAM)?.split("_").map(Boolean);
+    url.searchParams.delete(INVALIDATED_PARAM);
   }
   if (!state.prerendering?.fallback) {
     const matchers = await manifest2._.matchers();
@@ -3908,7 +3908,7 @@ async function respond(request, options2, manifest2, state) {
         }
       }
     },
-    url: url2,
+    url,
     isDataRequest: is_data_request
   };
   let resolve_opts = {
@@ -3933,15 +3933,15 @@ async function respond(request, options2, manifest2, state) {
         if (DEV)
           ;
       }
-      const normalized = normalize_path(url2.pathname, trailing_slash ?? "never");
-      if (normalized !== url2.pathname && !state.prerendering?.fallback) {
+      const normalized = normalize_path(url.pathname, trailing_slash ?? "never");
+      if (normalized !== url.pathname && !state.prerendering?.fallback) {
         return new Response(void 0, {
           status: 308,
           headers: {
             "x-sveltekit-normalize": "1",
             location: (
               // ensure paths starting with '//' are not treated as protocol-relative
-              (normalized.startsWith("//") ? url2.origin + normalized : normalized) + (url2.search === "?" ? "" : url2.search)
+              (normalized.startsWith("//") ? url.origin + normalized : normalized) + (url.search === "?" ? "" : url.search)
             )
           }
         });
@@ -3949,14 +3949,14 @@ async function respond(request, options2, manifest2, state) {
     }
     const { cookies, new_cookies, get_cookie_header } = get_cookies(
       request,
-      url2,
+      url,
       trailing_slash ?? "never"
     );
     cookies_to_add = new_cookies;
     event.cookies = cookies;
     event.fetch = create_fetch({ event, options: options2, manifest: manifest2, state, get_cookie_header });
     if (state.prerendering && !state.prerendering.fallback)
-      disable_search(url2);
+      disable_search(url);
     const response = await options2.hooks.handle({
       event,
       resolve: (event2, opts) => resolve(event2, opts).then((response2) => {
@@ -4163,7 +4163,7 @@ var manifest = {
   assets: /* @__PURE__ */ new Set(["favicon.png"]),
   mimeTypes: { ".png": "image/png" },
   _: {
-    client: { "start": { "file": "_app/immutable/entry/start.8b7267e3.js", "imports": ["_app/immutable/entry/start.8b7267e3.js", "_app/immutable/chunks/index.e3c2d60e.js", "_app/immutable/chunks/singletons.07b06ab2.js"], "stylesheets": [], "fonts": [] }, "app": { "file": "_app/immutable/entry/app.8971a0e7.js", "imports": ["_app/immutable/entry/app.8971a0e7.js", "_app/immutable/chunks/index.e3c2d60e.js"], "stylesheets": [], "fonts": [] } },
+    client: { "start": { "file": "_app/immutable/entry/start.1fb003fd.js", "imports": ["_app/immutable/entry/start.1fb003fd.js", "_app/immutable/chunks/index.e3c2d60e.js", "_app/immutable/chunks/singletons.41783752.js"], "stylesheets": [], "fonts": [] }, "app": { "file": "_app/immutable/entry/app.143b568d.js", "imports": ["_app/immutable/entry/app.143b568d.js", "_app/immutable/chunks/index.e3c2d60e.js"], "stylesheets": [], "fonts": [] } },
     nodes: [
       () => Promise.resolve().then(() => (init__(), __exports)),
       () => Promise.resolve().then(() => (init__2(), __exports2)),

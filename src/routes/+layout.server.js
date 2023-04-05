@@ -1,22 +1,24 @@
 import { dev } from "$app/environment";
 
-  let url;
+  let ipurl;
   // console.log('dev'.dev);
   if (dev) {
-    url = "/api/ipapi";
+    ipurl = "/api/ipapi";
   } else {
-    url = "/api/geo";
+    ipurl = "/api/geo";
   }
 
-export async function load({ fetch }) {
+export async function load({ fetch, url }) {
 
+  // console.log("INFO: ",browser, dev);
 
-  const res = await fetch(url);
+  const res = await fetch(ipurl);
   const location = await res.json();
 
   return {
+    host: url.hostname,
     now: new Date().toISOString(),
-    dev: url,
+    dev: ipurl,
     location,
   };
 }

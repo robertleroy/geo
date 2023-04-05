@@ -1,6 +1,6 @@
 <script>
   import './app.css';
-  let title = 'Home';
+  
   const routes = [
     { name: 'Home', path: '/' },
     // { name: 'About', path: '/about' },
@@ -10,7 +10,7 @@
 <header class=''>
   <div class='flex'>
     <div class='title'>
-      <a href='/'>{title}</a>
+      <a href="https://geo-nine-teal.vercel.app/" target='_blank' rel='noopener noreferrer'>Vercel App</a>
     </div>
     <nav>
       {#each routes as route}
