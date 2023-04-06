@@ -1,6 +1,6 @@
 import { json } from '@sveltejs/kit';
 
-export async function GET({request}) {
+export async function GET(request) {
   console.log("request", request);
 
 	// const ip = request.getClientAddress();
