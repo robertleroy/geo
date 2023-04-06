@@ -15,8 +15,8 @@ export async function GET(event) {
 
   let test = {
     // ip,
-    city,
-    region,
+    // city,
+    // region,
     // country,
     // lat,
     // lon
@@ -24,5 +24,5 @@ export async function GET(event) {
 
   // console.log('SERVERLESS', location);
 
-	return json(...test);
+	return json(city,region);
 }

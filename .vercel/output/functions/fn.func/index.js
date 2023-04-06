@@ -792,8 +792,8 @@ var init__2 = __esm({
   ".svelte-kit/output/server/nodes/1.js"() {
     index2 = 1;
     component2 = async () => (await Promise.resolve().then(() => (init_error_svelte(), error_svelte_exports))).default;
-    file2 = "_app/immutable/entry/error.svelte.8aacd2ff.js";
-    imports2 = ["_app/immutable/entry/error.svelte.8aacd2ff.js", "_app/immutable/chunks/index.48413d8c.js", "_app/immutable/chunks/singletons.d3d054a4.js"];
+    file2 = "_app/immutable/entry/error.svelte.2ee05d32.js";
+    imports2 = ["_app/immutable/entry/error.svelte.2ee05d32.js", "_app/immutable/chunks/index.48413d8c.js", "_app/immutable/chunks/singletons.15040a56.js"];
     stylesheets2 = [];
     fonts2 = [];
   }
@@ -896,15 +896,7 @@ async function GET(event) {
   console.log(event.request);
   const city = decodeURIComponent(event.request.headers.get("x-vercel-ip-city") ?? "unknown");
   const region = decodeURIComponent(event.request.headers.get("x-vercel-ip-country-region") ?? "unknown");
-  let test2 = {
-    // ip,
-    city,
-    region
-    // country,
-    // lat,
-    // lon
-  };
-  return json(...test2);
+  return json(city, region);
 }
 var init_server = __esm({
   ".svelte-kit/output/server/entries/endpoints/api/geo/_server.js"() {
@@ -1104,7 +1096,7 @@ var options = {
 		<div class="error">
 			<span class="status">` + status + '</span>\n			<div class="message">\n				<h1>' + message + "</h1>\n			</div>\n		</div>\n	</body>\n</html>\n"
   },
-  version_hash: "fjtc47"
+  version_hash: "1he6lsm"
 };
 function get_hooks() {
   return {};
@@ -4273,7 +4265,7 @@ var manifest = {
   assets: /* @__PURE__ */ new Set(["favicon.png"]),
   mimeTypes: { ".png": "image/png" },
   _: {
-    client: { "start": { "file": "_app/immutable/entry/start.6428ca00.js", "imports": ["_app/immutable/entry/start.6428ca00.js", "_app/immutable/chunks/index.48413d8c.js", "_app/immutable/chunks/singletons.d3d054a4.js"], "stylesheets": [], "fonts": [] }, "app": { "file": "_app/immutable/entry/app.4ff3475c.js", "imports": ["_app/immutable/entry/app.4ff3475c.js", "_app/immutable/chunks/index.48413d8c.js"], "stylesheets": [], "fonts": [] } },
+    client: { "start": { "file": "_app/immutable/entry/start.77361f69.js", "imports": ["_app/immutable/entry/start.77361f69.js", "_app/immutable/chunks/index.48413d8c.js", "_app/immutable/chunks/singletons.15040a56.js"], "stylesheets": [], "fonts": [] }, "app": { "file": "_app/immutable/entry/app.19c30ac6.js", "imports": ["_app/immutable/entry/app.19c30ac6.js", "_app/immutable/chunks/index.48413d8c.js"], "stylesheets": [], "fonts": [] } },
     nodes: [
       () => Promise.resolve().then(() => (init__(), __exports)),
       () => Promise.resolve().then(() => (init__2(), __exports2)),
