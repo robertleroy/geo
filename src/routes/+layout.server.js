@@ -4,7 +4,7 @@ import { dev } from "$app/environment";
   let ipurl;
   // console.log('dev'.dev);
 
-export async function load({ fetch, url }) {
+export async function load({ fetch, url, request }) {
 
   // console.log("DEBUG: ",request);
 
