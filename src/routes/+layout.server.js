@@ -8,15 +8,17 @@ import { dev } from "$app/environment";
     ipurl = "/api/geo";
   }
 
-export async function load({ fetch, url }) {
+export async function load({ fetch, url, request }) {
 
-  // console.log("INFO: ",browser, dev);
+  console.log("DEBUG: ",request);
 
   const res = await fetch(ipurl);
   const location = await res.json();
 
   return {
-    host: url.hostname,
+    // headers: event.request.headers,
+    host: url.host,
+    hostname: url.hostname,
     now: new Date().toISOString(),
     dev: ipurl,
     location,

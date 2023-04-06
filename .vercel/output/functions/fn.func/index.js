@@ -566,11 +566,14 @@ var layout_server_exports = {};
 __export(layout_server_exports, {
   load: () => load
 });
-async function load({ fetch: fetch2, url }) {
+async function load({ fetch: fetch2, url, request }) {
+  console.log("DEBUG: ", request);
   const res = await fetch2(ipurl);
   const location = await res.json();
   return {
-    host: url.hostname,
+    // headers: event.request.headers,
+    host: url.host,
+    hostname: url.hostname,
     now: (/* @__PURE__ */ new Date()).toISOString(),
     dev: ipurl,
     location
@@ -590,25 +593,114 @@ var layout_svelte_exports = {};
 __export(layout_svelte_exports, {
   default: () => Layout
 });
+function dateObj(date, mask, utc) {
+  date = date ? new Date(date) : /* @__PURE__ */ new Date();
+  mask = mask ? mask : "DDD MMM dd YYYY HH:mm:ss";
+  var MMMM = ["\0", "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+  var MMM = ["", "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+  var dddd = ["", "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+  var ddd = ["", "Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+  function ii(i, len) {
+    var s22 = i + "";
+    len = len || 2;
+    while (s22.length < len)
+      s22 = "0" + s22;
+    return s22;
+  }
+  var y = utc ? date.getUTCFullYear() : date.getFullYear();
+  mask = mask.replace(/(^|[^\\])yyyy+/g, "$1" + y);
+  mask = mask.replace(/(^|[^\\])yy/g, "$1" + y.toString().substr(2, 2));
+  mask = mask.replace(/(^|[^\\])y/g, "$1" + y);
+  var Y = utc ? date.getUTCFullYear() : date.getFullYear();
+  mask = mask.replace(/(^|[^\\])YYYY+/g, "$1" + Y);
+  mask = mask.replace(/(^|[^\\])YY/g, "$1" + Y.toString().substr(2, 2));
+  mask = mask.replace(/(^|[^\\])Y/g, "$1" + Y);
+  var M = (utc ? date.getUTCMonth() : date.getMonth()) + 1;
+  mask = mask.replace(/(^|[^\\])MMMM+/g, "$1" + MMMM[0]);
+  mask = mask.replace(/(^|[^\\])MMM/g, "$1" + MMM[0]);
+  mask = mask.replace(/(^|[^\\])MM/g, "$1" + ii(M));
+  mask = mask.replace(/(^|[^\\])M/g, "$1" + M);
+  var d = utc ? date.getUTCDate() : date.getDate();
+  mask = mask.replace(/(^|[^\\])dddd+/g, "$1" + dddd[0]);
+  mask = mask.replace(/(^|[^\\])ddd/g, "$1" + ddd[0]);
+  mask = mask.replace(/(^|[^\\])dd/g, "$1" + ii(d));
+  mask = mask.replace(/(^|[^\\])d/g, "$1" + d);
+  var D = utc ? date.getUTCDate() : date.getDate();
+  mask = mask.replace(/(^|[^\\])DDDD+/g, "$1" + dddd[0]);
+  mask = mask.replace(/(^|[^\\])DDD/g, "$1" + ddd[0]);
+  mask = mask.replace(/(^|[^\\])DD/g, "$1" + ii(D));
+  mask = mask.replace(/(^|[^\\])D/g, "$1" + D);
+  var H = utc ? date.getUTCHours() : date.getHours();
+  mask = mask.replace(/(^|[^\\])HH+/g, "$1" + ii(H));
+  mask = mask.replace(/(^|[^\\])H/g, "$1" + H);
+  var h = H > 12 ? H - 12 : H == 0 ? 12 : H;
+  mask = mask.replace(/(^|[^\\])hh+/g, "$1" + ii(h));
+  mask = mask.replace(/(^|[^\\])h/g, "$1" + h);
+  var m = utc ? date.getUTCMinutes() : date.getMinutes();
+  mask = mask.replace(/(^|[^\\])mm+/g, "$1" + ii(m));
+  mask = mask.replace(/(^|[^\\])m/g, "$1" + m);
+  var s2 = utc ? date.getUTCSeconds() : date.getSeconds();
+  mask = mask.replace(/(^|[^\\])ss+/g, "$1" + ii(s2));
+  mask = mask.replace(/(^|[^\\])s/g, "$1" + s2);
+  var S = utc ? date.getUTCMilliseconds() : date.getMilliseconds();
+  mask = mask.replace(/(^|[^\\])SSS+/g, "$1" + ii(S, 3));
+  S = Math.round(S / 10);
+  mask = mask.replace(/(^|[^\\])SS/g, "$1" + ii(S));
+  S = Math.round(S / 10);
+  mask = mask.replace(/(^|[^\\])S/g, "$1" + S);
+  var A = H < 12 ? "AM" : "PM";
+  mask = mask.replace(/(^|[^\\])AA+/g, "$1" + A);
+  mask = mask.replace(/(^|[^\\])A/g, "$1" + A.charAt(0));
+  var a = A.toLowerCase();
+  mask = mask.replace(/(^|[^\\])aa+/g, "$1" + a);
+  mask = mask.replace(/(^|[^\\])a/g, "$1" + a.charAt(0));
+  var o = ["th", "st", "nd", "rd"][d % 10 > 3 ? 0 : (d % 100 - d % 10 !== 10) * d % 10];
+  mask = mask.replace(/(^|[^\\])o+/g, "$1" + o);
+  var timezone = /(?:[PMCEA][SDP]T|(?:Pacific|Mountain|Central|Eastern|Atlantic) (?:Standard|Daylight|Prevailing) Time|(?:GMT|UTC)(?:[-+]d{4})?)/g;
+  var timezoneClip = /[^-+dA-Z]/g;
+  var Z = (String(date).match(timezone) || [""]).pop().replace(timezoneClip, "");
+  mask = mask.replace(/(^|[^\\])Z+/g, "$1" + Z);
+  var tz = -date.getTimezoneOffset();
+  var z = utc || !tz ? "Z" : tz > 0 ? "+" : "-";
+  if (!utc) {
+    tz = Math.abs(tz);
+    var tzHrs = Math.floor(tz / 60);
+    var tzMin = tz % 60;
+    z += ii(tzHrs) + ":" + ii(tzMin);
+  }
+  var day = (utc ? date.getUTCDay() : date.getDay()) + 1;
+  mask = mask.replace(new RegExp(dddd[0], "g"), dddd[day]);
+  mask = mask.replace(new RegExp(ddd[0], "g"), ddd[day]);
+  mask = mask.replace(new RegExp(MMMM[0], "g"), MMMM[M]);
+  mask = mask.replace(new RegExp(MMM[0], "g"), MMM[M]);
+  mask = mask.replace(/\\(.)/g, "$1");
+  return mask;
+}
 var css, Layout;
 var init_layout_svelte = __esm({
   ".svelte-kit/output/server/entries/pages/_layout.svelte.js"() {
     init_index2();
     css = {
-      code: "header.svelte-1hmy21k.svelte-1hmy21k{border-bottom:1px solid #ccc}header.svelte-1hmy21k .flex.svelte-1hmy21k{display:flex;justify-content:space-between;align-items:center;gap:0 1rem;padding:0.5rem 2rem;max-width:var(--max-width);margin:0 auto}header.svelte-1hmy21k nav.svelte-1hmy21k{display:flex;align-items:baseline;gap:0 1rem}.router.svelte-1hmy21k.svelte-1hmy21k{padding:0.5rem 2rem;max-width:var(--max-width);margin:0 auto}",
+      code: ".app.svelte-1gn23j8.svelte-1gn23j8{display:grid;grid-template-rows:auto 1fr auto;height:100%}header.svelte-1gn23j8.svelte-1gn23j8{border-bottom:1px solid #ccc}header.svelte-1gn23j8 .flex.svelte-1gn23j8{display:flex;justify-content:space-between;align-items:center;gap:0 1rem;padding:1rem 2rem 0.5rem;max-width:var(--max-width);margin:0 auto}header.svelte-1gn23j8 nav.svelte-1gn23j8{display:flex;align-items:baseline;gap:0 1rem}.router.svelte-1gn23j8.svelte-1gn23j8{padding:0.5rem 2rem;max-width:var(--max-width);margin:0 auto;height:100%}footer.svelte-1gn23j8.svelte-1gn23j8{border-top:1px solid #ccc}footer.svelte-1gn23j8 .flex.svelte-1gn23j8{display:flex;justify-content:center;align-items:center;gap:0 1rem;padding:0.5rem 2rem;max-width:var(--max-width);margin:0 auto}",
       map: null
     };
     Layout = create_ssr_component(($$result, $$props, $$bindings, slots) => {
+      let { data } = $$props;
       const routes = [{ name: "Home", path: "/" }];
+      if ($$props.data === void 0 && $$bindings.data && data !== void 0)
+        $$bindings.data(data);
       $$result.css.add(css);
-      return `<header class=" svelte-1hmy21k"><div class="flex svelte-1hmy21k"><div class="title"><a href="https://geo-nine-teal.vercel.app/" target="_blank" rel="noopener noreferrer">Vercel App</a></div>
-    <nav class="svelte-1hmy21k">${each(routes, (route) => {
+      return `<div class="app svelte-1gn23j8"><header class=" svelte-1gn23j8"><div class="flex svelte-1gn23j8"><div class="title"><a href="https://geo-nine-teal.vercel.app/" target="_blank" rel="noopener noreferrer">Vercel App</a></div>
+
+      <nav class="svelte-1gn23j8">${each(routes, (route) => {
         return `<div class="route"><a${add_attribute("href", route.path, 0)}>${escape(route.name)}</a>
-      </div>`;
+        </div>`;
       })}</nav></div></header>
 
-<main><div class="router svelte-1hmy21k">${slots.default ? slots.default({}) : ``}</div>
-</main>`;
+  <main><div class="router svelte-1gn23j8">${slots.default ? slots.default({}) : ``}</div></main>
+
+  <footer class="svelte-1gn23j8"><div class="flex svelte-1gn23j8">${escape(dateObj(data.now, "h:mm:ss aa"))}</div></footer>
+</div>`;
     });
   }
 });
@@ -631,10 +723,10 @@ var init__ = __esm({
     init_layout_server();
     index = 0;
     component = async () => (await Promise.resolve().then(() => (init_layout_svelte(), layout_svelte_exports))).default;
-    file = "_app/immutable/entry/_layout.svelte.a6e22f7a.js";
+    file = "_app/immutable/entry/_layout.svelte.b0d8b9c3.js";
     server_id = "src/routes/+layout.server.js";
-    imports = ["_app/immutable/entry/_layout.svelte.a6e22f7a.js", "_app/immutable/chunks/index.e3c2d60e.js"];
-    stylesheets = ["_app/immutable/assets/_layout.f619b31a.css"];
+    imports = ["_app/immutable/entry/_layout.svelte.b0d8b9c3.js", "_app/immutable/chunks/index.48413d8c.js"];
+    stylesheets = ["_app/immutable/assets/_layout.aa00d854.css"];
     fonts = [];
   }
 });
@@ -692,8 +784,8 @@ var init__2 = __esm({
   ".svelte-kit/output/server/nodes/1.js"() {
     index2 = 1;
     component2 = async () => (await Promise.resolve().then(() => (init_error_svelte(), error_svelte_exports))).default;
-    file2 = "_app/immutable/entry/error.svelte.d3bcb905.js";
-    imports2 = ["_app/immutable/entry/error.svelte.d3bcb905.js", "_app/immutable/chunks/index.e3c2d60e.js", "_app/immutable/chunks/singletons.41783752.js"];
+    file2 = "_app/immutable/entry/error.svelte.35ea9b06.js";
+    imports2 = ["_app/immutable/entry/error.svelte.35ea9b06.js", "_app/immutable/chunks/index.48413d8c.js", "_app/immutable/chunks/singletons.f8a8097d.js"];
     stylesheets2 = [];
     fonts2 = [];
   }
@@ -716,7 +808,7 @@ var init_page_svelte = __esm({
   ".svelte-kit/output/server/entries/pages/_page.svelte.js"() {
     init_index2();
     css2 = {
-      code: ".my_page.svelte-gln0v9{width:fit-content;margin:5vh auto}",
+      code: ".my_page.svelte-tddgvl{width:25em;margin:5vh auto}.row.svelte-tddgvl{display:flex;justify-content:space-between;align-items:center;gap:0 1rem}.label.svelte-tddgvl{display:inline-block;width:6rem}",
       map: null
     };
     Page = create_ssr_component(($$result, $$props, $$bindings, slots) => {
@@ -725,15 +817,30 @@ var init_page_svelte = __esm({
       if ($$props.data === void 0 && $$bindings.data && data !== void 0)
         $$bindings.data(data);
       $$result.css.add(css2);
-      return `<div class="my_page svelte-gln0v9">
+      return `<div class="my_page svelte-tddgvl">
 
-  <div class="host">${escape(data.host)}</div>
+  
 
   <div class="location">
+    
+    <div class="host"><div class="label svelte-tddgvl">Host: </div>
+      ${escape(data?.host)}</div>
+    
+    <div class="hostname"><div class="label svelte-tddgvl">Hostname: </div>
+      ${escape(data?.hostname)}</div>
+    
+    <div class="ip"><div class="label svelte-tddgvl">Ip: </div>
+      ${escape(location?.ip)}</div>
 
-    <div class="grid svelte-gln0v9"><div class="location">${escape(location?.city)}, ${escape(location?.region)} <!-- HTML_TAG_START -->&emsp;<!-- HTML_TAG_END --> ${escape(location?.country)}</div>
-      <div class="gps">${escape(location?.lat)}, ${escape(location?.lon)}</div>
-      <div class="ip">${escape(location?.ip)}</div></div></div>
+      <br>
+
+    <div class="row svelte-tddgvl"><div class="location"><div class="label svelte-tddgvl">Location: </div>
+        ${escape(location?.city)}, ${escape(location?.region)}</div>
+      <div class="country">${escape(location?.country)}</div></div>
+    
+    <div class="gps svelte-tddgvl"><div class="label svelte-tddgvl">GPS: </div>
+      ${escape(location?.lat)}, ${escape(location?.lon)}</div></div> 
+ 
 
   <br>
 </div>
@@ -763,10 +870,10 @@ var init__3 = __esm({
     init_page();
     index3 = 2;
     component3 = async () => (await Promise.resolve().then(() => (init_page_svelte(), page_svelte_exports))).default;
-    file3 = "_app/immutable/entry/_page.svelte.ffca1623.js";
+    file3 = "_app/immutable/entry/_page.svelte.41b8b5b3.js";
     universal_id = "src/routes/+page.js";
-    imports3 = ["_app/immutable/entry/_page.svelte.ffca1623.js", "_app/immutable/chunks/index.e3c2d60e.js", "_app/immutable/entry/_page.js.4ed993c7.js"];
-    stylesheets3 = ["_app/immutable/assets/_page.b34a2226.css"];
+    imports3 = ["_app/immutable/entry/_page.svelte.41b8b5b3.js", "_app/immutable/chunks/index.48413d8c.js", "_app/immutable/entry/_page.js.4ed993c7.js"];
+    stylesheets3 = ["_app/immutable/assets/_page.9464a1ad.css"];
     fonts3 = [];
   }
 });
@@ -994,7 +1101,7 @@ var options = {
 		<div class="error">
 			<span class="status">` + status + '</span>\n			<div class="message">\n				<h1>' + message + "</h1>\n			</div>\n		</div>\n	</body>\n</html>\n"
   },
-  version_hash: "17bqb92"
+  version_hash: "17lcivk"
 };
 function get_hooks() {
   return {};
@@ -4163,7 +4270,7 @@ var manifest = {
   assets: /* @__PURE__ */ new Set(["favicon.png"]),
   mimeTypes: { ".png": "image/png" },
   _: {
-    client: { "start": { "file": "_app/immutable/entry/start.1fb003fd.js", "imports": ["_app/immutable/entry/start.1fb003fd.js", "_app/immutable/chunks/index.e3c2d60e.js", "_app/immutable/chunks/singletons.41783752.js"], "stylesheets": [], "fonts": [] }, "app": { "file": "_app/immutable/entry/app.143b568d.js", "imports": ["_app/immutable/entry/app.143b568d.js", "_app/immutable/chunks/index.e3c2d60e.js"], "stylesheets": [], "fonts": [] } },
+    client: { "start": { "file": "_app/immutable/entry/start.d54d10bd.js", "imports": ["_app/immutable/entry/start.d54d10bd.js", "_app/immutable/chunks/index.48413d8c.js", "_app/immutable/chunks/singletons.f8a8097d.js"], "stylesheets": [], "fonts": [] }, "app": { "file": "_app/immutable/entry/app.068ff489.js", "imports": ["_app/immutable/entry/app.068ff489.js", "_app/immutable/chunks/index.48413d8c.js"], "stylesheets": [], "fonts": [] } },
     nodes: [
       () => Promise.resolve().then(() => (init__(), __exports)),
       () => Promise.resolve().then(() => (init__2(), __exports2)),
