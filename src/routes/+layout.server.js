@@ -1,6 +1,6 @@
 import { dev } from "$app/environment";
 
-  let location, test = {city: 'Cisco'};
+  let location, test = {city: 'Cisco', region: 'UT'};
   let ipurl;
   // console.log('dev'.dev);
 
