@@ -24,5 +24,5 @@ export async function GET({request}) {
 
   // console.log('SERVERLESS', location);
 
-	return {city, region};
+	return json({city,region});
 }
