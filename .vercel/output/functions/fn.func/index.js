@@ -568,6 +568,9 @@ __export(layout_server_exports, {
 });
 async function load({ fetch: fetch2, url, request }) {
   {
+    const res = await fetch2("/api/geo");
+    test = await res.json();
+    console.log("TEST", test);
     location = {
       ip: decodeURIComponent(request.headers.get("x-real-ip") ?? "unknown"),
       city: decodeURIComponent(request.headers.get("x-vercel-ip-city") ?? "unknown"),
@@ -788,8 +791,8 @@ var init__2 = __esm({
   ".svelte-kit/output/server/nodes/1.js"() {
     index2 = 1;
     component2 = async () => (await Promise.resolve().then(() => (init_error_svelte(), error_svelte_exports))).default;
-    file2 = "_app/immutable/entry/error.svelte.77e39977.js";
-    imports2 = ["_app/immutable/entry/error.svelte.77e39977.js", "_app/immutable/chunks/index.48413d8c.js", "_app/immutable/chunks/singletons.9caa0a23.js"];
+    file2 = "_app/immutable/entry/error.svelte.9a9c9380.js";
+    imports2 = ["_app/immutable/entry/error.svelte.9a9c9380.js", "_app/immutable/chunks/index.48413d8c.js", "_app/immutable/chunks/singletons.528bf450.js"];
     stylesheets2 = [];
     fonts2 = [];
   }
@@ -887,24 +890,17 @@ var server_exports = {};
 __export(server_exports, {
   GET: () => GET
 });
-async function GET({ request }) {
-  const ip = request.getClientAddress();
-  decodeURIComponent(request.headers.get("x-real-ip") ?? "unknown");
-  decodeURIComponent(request.headers.get("x-forwarded-for") ?? "unknown");
+async function GET(request) {
   const city = decodeURIComponent(request.headers.get("x-vercel-ip-city") ?? "unknown");
-  const lat = decodeURIComponent(request.headers.get("x-vercel-ip-latitude") ?? "unknown");
-  const lon = decodeURIComponent(request.headers.get("x-vercel-ip-longitude") ?? "unknown");
-  const country = decodeURIComponent(request.headers.get("x-vercel-ip-country") ?? "unknown");
-  const region = decodeURIComponent(request.headers.get("x-vercel-ip-country-region") ?? "unknown");
-  decodeURIComponent(request.headers.get("x-vercel-ip-timezone") ?? "unknown");
   let location2 = {
-    ip,
-    city,
-    region,
-    country,
-    lat,
-    lon
+    // ip,
+    city
+    // region,
+    // country,
+    // lat,
+    // lon
   };
+  console.log("SERVERLESS", location2);
   return json(...location2);
 }
 var init_server = __esm({
@@ -1105,7 +1101,7 @@ var options = {
 		<div class="error">
 			<span class="status">` + status + '</span>\n			<div class="message">\n				<h1>' + message + "</h1>\n			</div>\n		</div>\n	</body>\n</html>\n"
   },
-  version_hash: "1yf7g37"
+  version_hash: "8cs7lj"
 };
 function get_hooks() {
   return {};
@@ -4274,7 +4270,7 @@ var manifest = {
   assets: /* @__PURE__ */ new Set(["favicon.png"]),
   mimeTypes: { ".png": "image/png" },
   _: {
-    client: { "start": { "file": "_app/immutable/entry/start.8d4ebfc0.js", "imports": ["_app/immutable/entry/start.8d4ebfc0.js", "_app/immutable/chunks/index.48413d8c.js", "_app/immutable/chunks/singletons.9caa0a23.js"], "stylesheets": [], "fonts": [] }, "app": { "file": "_app/immutable/entry/app.e687d5ce.js", "imports": ["_app/immutable/entry/app.e687d5ce.js", "_app/immutable/chunks/index.48413d8c.js"], "stylesheets": [], "fonts": [] } },
+    client: { "start": { "file": "_app/immutable/entry/start.0c8b49ea.js", "imports": ["_app/immutable/entry/start.0c8b49ea.js", "_app/immutable/chunks/index.48413d8c.js", "_app/immutable/chunks/singletons.528bf450.js"], "stylesheets": [], "fonts": [] }, "app": { "file": "_app/immutable/entry/app.73c6629d.js", "imports": ["_app/immutable/entry/app.73c6629d.js", "_app/immutable/chunks/index.48413d8c.js"], "stylesheets": [], "fonts": [] } },
     nodes: [
       () => Promise.resolve().then(() => (init__(), __exports)),
       () => Promise.resolve().then(() => (init__2(), __exports2)),

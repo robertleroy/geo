@@ -12,6 +12,10 @@ export async function load({ fetch, url, request }) {
     const res = await fetch('/api/ipapi');
     location = await res.json();
   } else {
+    const res = await fetch('/api/geo');
+    test = await res.json();
+
+    console.log('TEST', test);
     
     location = {
       ip: decodeURIComponent(request.headers.get('x-real-ip') ?? 'unknown'),
