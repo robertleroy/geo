@@ -1,23 +1,42 @@
 import { dev } from "$app/environment";
 
+  let location;
   let ipurl;
   // console.log('dev'.dev);
-  if (dev) {
-    ipurl = "/api/ipapi";
-  } else {
-    ipurl = "/api/geo";
-  }
 
-export async function load({ fetch, url, request }) {
+export async function load({ fetch, url }) {
 
   // console.log("DEBUG: ",request);
 
-  const res = await fetch(ipurl);
-  const location = await res.json();
+  if (dev) {
+    const res = await fetch('/api/ipapi');
+    location = await res.json();
+  } else {
+    
+    location = {
+      ip: decodeURIComponent(request.headers.get('x-real-ip') ?? 'unknown'),
+      city: decodeURIComponent(request.headers.get('x-vercel-ip-city') ?? 'unknown'),
+      region: decodeURIComponent(request.headers.get('x-vercel-ip-country-region') ?? 'unknown'),
+      country: decodeURIComponent(request.headers.get('x-vercel-ip-country') ?? 'unknown'),
+      lat: decodeURIComponent(request.headers.get('x-vercel-ip-latitude') ?? 'unknown'),
+      lon: decodeURIComponent(request.headers.get('x-vercel-ip-longitude') ?? 'unknown'),
+    };
+
+    // location = {
+    //   ip: '999.999.99.999',
+    //   city: 'Cisco',
+    //   region: 'UT',
+    //   country: 'US',
+    //   lat: 99.999,
+    //   lon: -99.999,
+    // };
+  }
+
+  // 
+  // const location = await res.json();
 
   return {
     // headers: event.request.headers,
-    headers: request.headers.get('x-real-ip') ?? 'unknown',
     host: url.host,
     hostname: url.hostname,
     now: new Date().toISOString(),

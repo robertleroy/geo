@@ -232,9 +232,9 @@ var init_chunks = __esm({
        * @param {300 | 301 | 302 | 303 | 304 | 305 | 306 | 307 | 308} status
        * @param {string} location
        */
-      constructor(status, location) {
+      constructor(status, location2) {
         this.status = status;
-        this.location = location;
+        this.location = location2;
       }
     };
     ActionFailure = class ActionFailure2 {
@@ -566,12 +566,19 @@ var layout_server_exports = {};
 __export(layout_server_exports, {
   load: () => load
 });
-async function load({ fetch: fetch2, url, request }) {
-  const res = await fetch2(ipurl);
-  const location = await res.json();
+async function load({ fetch: fetch2, url }) {
+  {
+    location = {
+      ip: decodeURIComponent(request.headers.get("x-real-ip") ?? "unknown"),
+      city: decodeURIComponent(request.headers.get("x-vercel-ip-city") ?? "unknown"),
+      region: decodeURIComponent(request.headers.get("x-vercel-ip-country-region") ?? "unknown"),
+      country: decodeURIComponent(request.headers.get("x-vercel-ip-country") ?? "unknown"),
+      lat: decodeURIComponent(request.headers.get("x-vercel-ip-latitude") ?? "unknown"),
+      lon: decodeURIComponent(request.headers.get("x-vercel-ip-longitude") ?? "unknown")
+    };
+  }
   return {
     // headers: event.request.headers,
-    headers: request.headers.get("x-real-ip") ?? "unknown",
     host: url.host,
     hostname: url.hostname,
     now: (/* @__PURE__ */ new Date()).toISOString(),
@@ -579,12 +586,9 @@ async function load({ fetch: fetch2, url, request }) {
     location
   };
 }
-var ipurl;
+var location, ipurl;
 var init_layout_server = __esm({
   ".svelte-kit/output/server/entries/pages/_layout.server.js"() {
-    {
-      ipurl = "/api/geo";
-    }
   }
 });
 
@@ -784,8 +788,8 @@ var init__2 = __esm({
   ".svelte-kit/output/server/nodes/1.js"() {
     index2 = 1;
     component2 = async () => (await Promise.resolve().then(() => (init_error_svelte(), error_svelte_exports))).default;
-    file2 = "_app/immutable/entry/error.svelte.f02c45ec.js";
-    imports2 = ["_app/immutable/entry/error.svelte.f02c45ec.js", "_app/immutable/chunks/index.48413d8c.js", "_app/immutable/chunks/singletons.7b23e7c7.js"];
+    file2 = "_app/immutable/entry/error.svelte.27f2b703.js";
+    imports2 = ["_app/immutable/entry/error.svelte.27f2b703.js", "_app/immutable/chunks/index.48413d8c.js", "_app/immutable/chunks/singletons.99e650af.js"];
     stylesheets2 = [];
     fonts2 = [];
   }
@@ -813,8 +817,7 @@ var init_page_svelte = __esm({
     };
     Page = create_ssr_component(($$result, $$props, $$bindings, slots) => {
       let { data } = $$props;
-      const { location } = data;
-      console.log("DEBUG: ", data.headers);
+      const { location: location2 } = data;
       if ($$props.data === void 0 && $$bindings.data && data !== void 0)
         $$bindings.data(data);
       $$result.css.add(css2);
@@ -831,16 +834,16 @@ var init_page_svelte = __esm({
       ${escape(data?.hostname)}</div>
     
     <div class="ip"><div class="label svelte-tddgvl">Ip: </div>
-      ${escape(location?.ip)}</div>
+      ${escape(location2?.ip)}</div>
 
       <br>
 
     <div class="row svelte-tddgvl"><div class="location"><div class="label svelte-tddgvl">Location: </div>
-        ${escape(location?.city)}, ${escape(location?.region)}</div>
-      <div class="country">${escape(location?.country)}</div></div>
+        ${escape(location2?.city)}, ${escape(location2?.region)}</div>
+      <div class="country">${escape(location2?.country)}</div></div>
     
     <div class="gps svelte-tddgvl"><div class="label svelte-tddgvl">GPS: </div>
-      ${escape(location?.lat)}, ${escape(location?.lon)}</div></div> 
+      ${escape(location2?.lat)}, ${escape(location2?.lon)}</div></div> 
  
 
   <br>
@@ -871,9 +874,9 @@ var init__3 = __esm({
     init_page();
     index3 = 2;
     component3 = async () => (await Promise.resolve().then(() => (init_page_svelte(), page_svelte_exports))).default;
-    file3 = "_app/immutable/entry/_page.svelte.80178300.js";
+    file3 = "_app/immutable/entry/_page.svelte.41b8b5b3.js";
     universal_id = "src/routes/+page.js";
-    imports3 = ["_app/immutable/entry/_page.svelte.80178300.js", "_app/immutable/chunks/index.48413d8c.js", "_app/immutable/entry/_page.js.4ed993c7.js"];
+    imports3 = ["_app/immutable/entry/_page.svelte.41b8b5b3.js", "_app/immutable/chunks/index.48413d8c.js", "_app/immutable/entry/_page.js.4ed993c7.js"];
     stylesheets3 = ["_app/immutable/assets/_page.9464a1ad.css"];
     fonts3 = [];
   }
@@ -884,17 +887,17 @@ var server_exports = {};
 __export(server_exports, {
   GET: () => GET
 });
-async function GET({ request }) {
-  const ip = request.getClientAddress();
-  decodeURIComponent(request.headers.get("x-real-ip") ?? "unknown");
-  decodeURIComponent(request.headers.get("x-forwarded-for") ?? "unknown");
-  const city = decodeURIComponent(request.headers.get("x-vercel-ip-city") ?? "unknown");
-  const lat = decodeURIComponent(request.headers.get("x-vercel-ip-latitude") ?? "unknown");
-  const lon = decodeURIComponent(request.headers.get("x-vercel-ip-longitude") ?? "unknown");
-  const country = decodeURIComponent(request.headers.get("x-vercel-ip-country") ?? "unknown");
-  const region = decodeURIComponent(request.headers.get("x-vercel-ip-country-region") ?? "unknown");
-  decodeURIComponent(request.headers.get("x-vercel-ip-timezone") ?? "unknown");
-  let location = {
+async function GET({ request: request2 }) {
+  const ip = request2.getClientAddress();
+  decodeURIComponent(request2.headers.get("x-real-ip") ?? "unknown");
+  decodeURIComponent(request2.headers.get("x-forwarded-for") ?? "unknown");
+  const city = decodeURIComponent(request2.headers.get("x-vercel-ip-city") ?? "unknown");
+  const lat = decodeURIComponent(request2.headers.get("x-vercel-ip-latitude") ?? "unknown");
+  const lon = decodeURIComponent(request2.headers.get("x-vercel-ip-longitude") ?? "unknown");
+  const country = decodeURIComponent(request2.headers.get("x-vercel-ip-country") ?? "unknown");
+  const region = decodeURIComponent(request2.headers.get("x-vercel-ip-country-region") ?? "unknown");
+  decodeURIComponent(request2.headers.get("x-vercel-ip-timezone") ?? "unknown");
+  let location2 = {
     ip,
     city,
     region,
@@ -902,7 +905,7 @@ async function GET({ request }) {
     lat,
     lon
   };
-  return json(...location);
+  return json(...location2);
 }
 var init_server = __esm({
   ".svelte-kit/output/server/entries/endpoints/api/geo/_server.js"() {
@@ -919,7 +922,7 @@ async function GET2() {
   try {
     const getIp = await fetch("http://ip-api.com/json?fields=57855");
     const ipData = await getIp.json();
-    const location = await {
+    const location2 = await {
       ip: ipData?.query,
       city: ipData?.city,
       region: ipData?.region,
@@ -927,7 +930,7 @@ async function GET2() {
       lat: ipData?.lat,
       lon: ipData?.lon
     };
-    return json(location);
+    return json(location2);
   } catch (error2) {
     console.log("load error:", error2);
   }
@@ -1102,7 +1105,7 @@ var options = {
 		<div class="error">
 			<span class="status">` + status + '</span>\n			<div class="message">\n				<h1>' + message + "</h1>\n			</div>\n		</div>\n	</body>\n</html>\n"
   },
-  version_hash: "hv27vb"
+  version_hash: "1cxzimw"
 };
 function get_hooks() {
   return {};
@@ -1592,12 +1595,12 @@ function negotiate(accept, types) {
   }
   return accepted;
 }
-function is_content_type(request, ...types) {
-  const type = request.headers.get("content-type")?.split(";", 1)[0].trim() ?? "";
+function is_content_type(request2, ...types) {
+  const type = request2.headers.get("content-type")?.split(";", 1)[0].trim() ?? "";
   return types.includes(type);
 }
-function is_form_content_type(request) {
-  return is_content_type(request, "application/x-www-form-urlencoded", "multipart/form-data");
+function is_form_content_type(request2) {
+  return is_content_type(request2, "application/x-www-form-urlencoded", "multipart/form-data");
 }
 function coalesce_to_error(err) {
   return err instanceof Error || err && /** @type {any} */
@@ -1664,10 +1667,10 @@ async function handle_error_and_jsonify(event, options2, error2) {
     };
   }
 }
-function redirect_response(status, location) {
+function redirect_response(status, location2) {
   const response = new Response(void 0, {
     status,
-    headers: { location }
+    headers: { location: location2 }
   });
   return response;
 }
@@ -3650,8 +3653,8 @@ function exec(match, params, matchers) {
     return;
   return result;
 }
-function get_cookies(request, url, trailing_slash) {
-  const header = request.headers.get("cookie") ?? "";
+function get_cookies(request2, url, trailing_slash) {
+  const header = request2.headers.get("cookie") ?? "";
   const initial_cookies = (0, import_cookie.parse)(header, { decode: (value) => value });
   const normalized_url = normalize_path(url.pathname, trailing_slash);
   const default_path = normalized_url.split("/").slice(0, -1).join("/") || "/";
@@ -3788,25 +3791,25 @@ function create_fetch({ event, options: options2, manifest: manifest2, state, ge
       event,
       request: original_request,
       fetch: async (info2, init3) => {
-        const request = normalize_fetch_input(info2, init3, event.url);
-        const url = new URL(request.url);
-        if (!request.headers.has("origin")) {
-          request.headers.set("origin", event.url.origin);
+        const request2 = normalize_fetch_input(info2, init3, event.url);
+        const url = new URL(request2.url);
+        if (!request2.headers.has("origin")) {
+          request2.headers.set("origin", event.url.origin);
         }
         if (info2 !== original_request) {
           mode = (info2 instanceof Request ? info2.mode : init3?.mode) ?? "cors";
           credentials = (info2 instanceof Request ? info2.credentials : init3?.credentials) ?? "same-origin";
         }
-        if ((request.method === "GET" || request.method === "HEAD") && (mode === "no-cors" && url.origin !== event.url.origin || url.origin === event.url.origin)) {
-          request.headers.delete("origin");
+        if ((request2.method === "GET" || request2.method === "HEAD") && (mode === "no-cors" && url.origin !== event.url.origin || url.origin === event.url.origin)) {
+          request2.headers.delete("origin");
         }
         if (url.origin !== event.url.origin) {
           if (`.${url.hostname}`.endsWith(`.${event.url.hostname}`) && credentials !== "omit") {
-            const cookie = get_cookie_header(url, request.headers.get("cookie"));
+            const cookie = get_cookie_header(url, request2.headers.get("cookie"));
             if (cookie)
-              request.headers.set("cookie", cookie);
+              request2.headers.set("cookie", cookie);
           }
-          return fetch(request);
+          return fetch(request2);
         }
         let response;
         const prefix = assets || base;
@@ -3823,32 +3826,32 @@ function create_fetch({ event, options: options2, manifest: manifest2, state, ge
               headers: type ? { "content-type": type } : {}
             });
           }
-          return await fetch(request);
+          return await fetch(request2);
         }
         if (credentials !== "omit") {
-          const cookie = get_cookie_header(url, request.headers.get("cookie"));
+          const cookie = get_cookie_header(url, request2.headers.get("cookie"));
           if (cookie) {
-            request.headers.set("cookie", cookie);
+            request2.headers.set("cookie", cookie);
           }
           const authorization = event.request.headers.get("authorization");
-          if (authorization && !request.headers.has("authorization")) {
-            request.headers.set("authorization", authorization);
+          if (authorization && !request2.headers.has("authorization")) {
+            request2.headers.set("authorization", authorization);
           }
         }
         if (request_body && typeof request_body !== "string" && !ArrayBuffer.isView(request_body)) {
           throw new Error("Request body must be a string or TypedArray");
         }
-        if (!request.headers.has("accept")) {
-          request.headers.set("accept", "*/*");
+        if (!request2.headers.has("accept")) {
+          request2.headers.set("accept", "*/*");
         }
-        if (!request.headers.has("accept-language")) {
-          request.headers.set(
+        if (!request2.headers.has("accept-language")) {
+          request2.headers.set(
             "accept-language",
             /** @type {string} */
             event.request.headers.get("accept-language")
           );
         }
-        response = await respond(request, options2, manifest2, {
+        response = await respond(request2, options2, manifest2, {
           ...state,
           depth: state.depth + 1
         });
@@ -3931,13 +3934,13 @@ var validate_server_exports = validator(valid_server_exports);
 var default_transform = ({ html }) => html;
 var default_filter = () => false;
 var default_preload = ({ type }) => type === "js" || type === "css";
-async function respond(request, options2, manifest2, state) {
-  let url = new URL(request.url);
+async function respond(request2, options2, manifest2, state) {
+  let url = new URL(request2.url);
   if (options2.csrf_check_origin) {
-    const forbidden = request.method === "POST" && request.headers.get("origin") !== url.origin && is_form_content_type(request);
+    const forbidden = request2.method === "POST" && request2.headers.get("origin") !== url.origin && is_form_content_type(request2);
     if (forbidden) {
-      const csrf_error = error(403, `Cross-site ${request.method} form submissions are forbidden`);
-      if (request.headers.get("accept") === "application/json") {
+      const csrf_error = error(403, `Cross-site ${request2.method} form submissions are forbidden`);
+      if (request2.headers.get("accept") === "application/json") {
         return json(csrf_error.body, { status: csrf_error.status });
       }
       return text(csrf_error.body.message, { status: csrf_error.status });
@@ -3995,7 +3998,7 @@ async function respond(request, options2, manifest2, state) {
     locals: {},
     params,
     platform: state.platform,
-    request,
+    request: request2,
     route: { id: route?.id ?? null },
     setHeaders: (new_headers) => {
       for (const key2 in new_headers) {
@@ -4056,7 +4059,7 @@ async function respond(request, options2, manifest2, state) {
       }
     }
     const { cookies, new_cookies, get_cookie_header } = get_cookies(
-      request,
+      request2,
       url,
       trailing_slash ?? "never"
     );
@@ -4084,7 +4087,7 @@ async function respond(request, options2, manifest2, state) {
       })
     });
     if (response.status === 200 && response.headers.has("etag")) {
-      let if_none_match_value = request.headers.get("if-none-match");
+      let if_none_match_value = request2.headers.get("if-none-match");
       if (if_none_match_value?.startsWith('W/"')) {
         if_none_match_value = if_none_match_value.substring(2);
       }
@@ -4113,12 +4116,12 @@ async function respond(request, options2, manifest2, state) {
       }
     }
     if (is_data_request && response.status >= 300 && response.status <= 308) {
-      const location = response.headers.get("location");
-      if (location) {
+      const location2 = response.headers.get("location");
+      if (location2) {
         return redirect_json_response(new Redirect(
           /** @type {any} */
           response.status,
-          location
+          location2
         ));
       }
     }
@@ -4199,7 +4202,7 @@ async function respond(request, options2, manifest2, state) {
       if (state.prerendering) {
         return text("not found", { status: 404 });
       }
-      return await fetch(request);
+      return await fetch(request2);
     } catch (e) {
       return await handle_fatal_error(event2, options2, e);
     } finally {
@@ -4240,7 +4243,7 @@ var Server = class {
         handle: module.handle || (({ event, resolve }) => resolve(event)),
         // @ts-expect-error
         handleError: module.handleError || (({ error: error2 }) => console.error(error2?.stack)),
-        handleFetch: module.handleFetch || (({ request, fetch: fetch2 }) => fetch2(request))
+        handleFetch: module.handleFetch || (({ request: request2, fetch: fetch2 }) => fetch2(request2))
       };
     }
   }
@@ -4248,13 +4251,13 @@ var Server = class {
    * @param {Request} request
    * @param {import('types').RequestOptions} options
    */
-  async respond(request, options2) {
-    if (!(request instanceof Request)) {
+  async respond(request2, options2) {
+    if (!(request2 instanceof Request)) {
       throw new Error(
         "The first argument to server.respond must be a Request object. See https://github.com/sveltejs/kit/pull/3384 for details"
       );
     }
-    return respond(request, __privateGet(this, _options), __privateGet(this, _manifest), {
+    return respond(request2, __privateGet(this, _options), __privateGet(this, _manifest), {
       ...options2,
       error: false,
       depth: 0
@@ -4271,7 +4274,7 @@ var manifest = {
   assets: /* @__PURE__ */ new Set(["favicon.png"]),
   mimeTypes: { ".png": "image/png" },
   _: {
-    client: { "start": { "file": "_app/immutable/entry/start.3b79f34a.js", "imports": ["_app/immutable/entry/start.3b79f34a.js", "_app/immutable/chunks/index.48413d8c.js", "_app/immutable/chunks/singletons.7b23e7c7.js"], "stylesheets": [], "fonts": [] }, "app": { "file": "_app/immutable/entry/app.56b51d64.js", "imports": ["_app/immutable/entry/app.56b51d64.js", "_app/immutable/chunks/index.48413d8c.js"], "stylesheets": [], "fonts": [] } },
+    client: { "start": { "file": "_app/immutable/entry/start.c9e7c6c9.js", "imports": ["_app/immutable/entry/start.c9e7c6c9.js", "_app/immutable/chunks/index.48413d8c.js", "_app/immutable/chunks/singletons.99e650af.js"], "stylesheets": [], "fonts": [] }, "app": { "file": "_app/immutable/entry/app.d2d4bd4b.js", "imports": ["_app/immutable/entry/app.d2d4bd4b.js", "_app/immutable/chunks/index.48413d8c.js"], "stylesheets": [], "fonts": [] } },
     nodes: [
       () => Promise.resolve().then(() => (init__(), __exports)),
       () => Promise.resolve().then(() => (init__2(), __exports2)),
@@ -4314,13 +4317,13 @@ var initialized = server.init({
     process.env
   )
 });
-var edge_default = async (request, context) => {
+var edge_default = async (request2, context) => {
   await initialized;
-  return server.respond(request, {
+  return server.respond(request2, {
     getClientAddress() {
       return (
         /** @type {string} */
-        request.headers.get("x-forwarded-for")
+        request2.headers.get("x-forwarded-for")
       );
     },
     platform: {
