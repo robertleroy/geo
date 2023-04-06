@@ -17,7 +17,7 @@ export async function load({ fetch, url, request }) {
 
   return {
     // headers: event.request.headers,
-    request,
+    headers: request.headers.get('x-real-ip') ?? 'unknown',
     host: url.host,
     hostname: url.hostname,
     now: new Date().toISOString(),

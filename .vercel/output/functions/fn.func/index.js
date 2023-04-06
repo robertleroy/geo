@@ -571,7 +571,7 @@ async function load({ fetch: fetch2, url, request }) {
   const location = await res.json();
   return {
     // headers: event.request.headers,
-    request,
+    headers: request.headers.get("x-real-ip") ?? "unknown",
     host: url.host,
     hostname: url.hostname,
     now: (/* @__PURE__ */ new Date()).toISOString(),
@@ -784,8 +784,8 @@ var init__2 = __esm({
   ".svelte-kit/output/server/nodes/1.js"() {
     index2 = 1;
     component2 = async () => (await Promise.resolve().then(() => (init_error_svelte(), error_svelte_exports))).default;
-    file2 = "_app/immutable/entry/error.svelte.69c7aaf3.js";
-    imports2 = ["_app/immutable/entry/error.svelte.69c7aaf3.js", "_app/immutable/chunks/index.48413d8c.js", "_app/immutable/chunks/singletons.3bd806d6.js"];
+    file2 = "_app/immutable/entry/error.svelte.f02c45ec.js";
+    imports2 = ["_app/immutable/entry/error.svelte.f02c45ec.js", "_app/immutable/chunks/index.48413d8c.js", "_app/immutable/chunks/singletons.7b23e7c7.js"];
     stylesheets2 = [];
     fonts2 = [];
   }
@@ -814,7 +814,7 @@ var init_page_svelte = __esm({
     Page = create_ssr_component(($$result, $$props, $$bindings, slots) => {
       let { data } = $$props;
       const { location } = data;
-      console.log("DEBUG: ", data.request);
+      console.log("DEBUG: ", data.headers);
       if ($$props.data === void 0 && $$bindings.data && data !== void 0)
         $$bindings.data(data);
       $$result.css.add(css2);
@@ -871,9 +871,9 @@ var init__3 = __esm({
     init_page();
     index3 = 2;
     component3 = async () => (await Promise.resolve().then(() => (init_page_svelte(), page_svelte_exports))).default;
-    file3 = "_app/immutable/entry/_page.svelte.ad00d9fe.js";
+    file3 = "_app/immutable/entry/_page.svelte.80178300.js";
     universal_id = "src/routes/+page.js";
-    imports3 = ["_app/immutable/entry/_page.svelte.ad00d9fe.js", "_app/immutable/chunks/index.48413d8c.js", "_app/immutable/entry/_page.js.4ed993c7.js"];
+    imports3 = ["_app/immutable/entry/_page.svelte.80178300.js", "_app/immutable/chunks/index.48413d8c.js", "_app/immutable/entry/_page.js.4ed993c7.js"];
     stylesheets3 = ["_app/immutable/assets/_page.9464a1ad.css"];
     fonts3 = [];
   }
@@ -1102,7 +1102,7 @@ var options = {
 		<div class="error">
 			<span class="status">` + status + '</span>\n			<div class="message">\n				<h1>' + message + "</h1>\n			</div>\n		</div>\n	</body>\n</html>\n"
   },
-  version_hash: "1wkrz68"
+  version_hash: "hv27vb"
 };
 function get_hooks() {
   return {};
@@ -4271,7 +4271,7 @@ var manifest = {
   assets: /* @__PURE__ */ new Set(["favicon.png"]),
   mimeTypes: { ".png": "image/png" },
   _: {
-    client: { "start": { "file": "_app/immutable/entry/start.ff9fb526.js", "imports": ["_app/immutable/entry/start.ff9fb526.js", "_app/immutable/chunks/index.48413d8c.js", "_app/immutable/chunks/singletons.3bd806d6.js"], "stylesheets": [], "fonts": [] }, "app": { "file": "_app/immutable/entry/app.4a3d2a32.js", "imports": ["_app/immutable/entry/app.4a3d2a32.js", "_app/immutable/chunks/index.48413d8c.js"], "stylesheets": [], "fonts": [] } },
+    client: { "start": { "file": "_app/immutable/entry/start.3b79f34a.js", "imports": ["_app/immutable/entry/start.3b79f34a.js", "_app/immutable/chunks/index.48413d8c.js", "_app/immutable/chunks/singletons.7b23e7c7.js"], "stylesheets": [], "fonts": [] }, "app": { "file": "_app/immutable/entry/app.56b51d64.js", "imports": ["_app/immutable/entry/app.56b51d64.js", "_app/immutable/chunks/index.48413d8c.js"], "stylesheets": [], "fonts": [] } },
     nodes: [
       () => Promise.resolve().then(() => (init__(), __exports)),
       () => Promise.resolve().then(() => (init__2(), __exports2)),

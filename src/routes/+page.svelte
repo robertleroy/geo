@@ -3,7 +3,7 @@
   export let data;
   // console.log('page', data);
   const { location } = data;
-  console.log("DEBUG: ",data.request);
+  console.log("DEBUG: ",data.headers);
 
   // console.log('event',data.headers);
 
