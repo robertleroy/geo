@@ -5,7 +5,7 @@
   const { location } = data;
   // console.log("DEBUG: ",data.location);
 
-  // console.log('event',data.headers);
+  console.log('TEST', data.test);
 
 </script>
 

@@ -1,11 +1,11 @@
 import { dev } from "$app/environment";
 
-  let location;
+  let location, test = {city: 'Cisco'};
   let ipurl;
   // console.log('dev'.dev);
 
 export async function load({ fetch, url, request }) {
-
+  
   // console.log("DEBUG: ",request);
 
   if (dev) {
@@ -15,7 +15,7 @@ export async function load({ fetch, url, request }) {
     const res = await fetch('/api/geo');
     test = await res.json();
 
-    console.log('TEST', test);
+    // console.log('TEST', test);
     
     location = {
       ip: decodeURIComponent(request.headers.get('x-real-ip') ?? 'unknown'),
@@ -41,6 +41,7 @@ export async function load({ fetch, url, request }) {
 
   return {
     // headers: event.request.headers,
+    test,
     host: url.host,
     hostname: url.hostname,
     now: new Date().toISOString(),
