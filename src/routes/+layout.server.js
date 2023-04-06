@@ -10,13 +10,14 @@ import { dev } from "$app/environment";
 
 export async function load({ fetch, url, request }) {
 
-  console.log("DEBUG: ",request);
+  // console.log("DEBUG: ",request);
 
   const res = await fetch(ipurl);
   const location = await res.json();
 
   return {
     // headers: event.request.headers,
+    request,
     host: url.host,
     hostname: url.hostname,
     now: new Date().toISOString(),
