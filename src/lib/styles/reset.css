@@ -1,22 +1,22 @@
 :root {
   --font-size: 16px;
-  --line-height: 1.5;
   --text-color: #2C3E50;
   --background-color: #fff;
   --sans-serif: sans-serif;
-  --header-height: 4rem;
-  --max-width: 1200px;
 }
 *, *::before, *::after { box-sizing: border-box; }
-html, body { height: 100vh; }
-html { font-size: var(--font-size); }
-body {
-  margin: 0;
-  font-family: var(--sans-serif);
+html { 
   font-size: var(--font-size);
+  text-size-adjust: 100%;
+}
+body {
+  height: 100dvh;
+  font-family: var(--sans-serif);
+  font-size: 1em;
   line-height: 1.5;
   color: var(--text-color);
   background-color: var(--background-color);
+  margin: 0;
   overflow-y: scroll;
 }
 h1, h2 {
@@ -24,3 +24,11 @@ h1, h2 {
   margin: 0;
 }
 p { margin: 0.5em 0; }
+ul {
+  margin-top: 0;
+  padding-left: 2ch;
+  list-style-position: inside;
+}
+ul:not(ul ul) {
+  padding: 0;
+}

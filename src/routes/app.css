@@ -1,6 +1,6 @@
-
-@import '$lib/styles/reset'; 
-
+@import "$lib/styles/reset.css";
+@import "$lib/styles/forms.css";
+@import '$lib/styles/vsdark.css';
 
 :root {
   --header-height: 4rem;
@@ -10,12 +10,14 @@
 }
 html {
   scroll-behavior: smooth;
-  scroll-padding-top: var(--header-height);
+  /* scroll-padding-top: var(--header-height); */
 }
 a {
   color: inherit;
 
-  &:not(:hover), &:active {
+  &:not(:hover),
+  &:active {
     text-decoration: none;
   }
 }
+

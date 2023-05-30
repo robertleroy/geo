@@ -1,92 +1,65 @@
-
 <script>
-  export let data;
-  // console.log('page', data);
-  const { location } = data;
-  // console.log("DEBUG: ",data.location);
+  import { ipStore, currentLocation, msg } from "$lib/stores/store";
+  import Notes from "./Notes.md";
 
-  console.log('TEST', data.test);
+  export let form;
+
+  
+  // $currentLocation = data.ipData;
+  
+  // $: console.log('PAGE', form);
+  $: $currentLocation = form?.newLocation;
+  // let lat, lon;
+  // $: console.log('currentLocation',$currentLocation);
 
 </script>
 
-  <div class="my_page">
-	<!-- <Details city={data.city} ip={data.ip} /> -->
+<div class="page">
+  <div>
+    <div class="locationData">
+      <div class="key">Ip:</div>
+      <div class="value">{$ipStore?.ip}</div>
 
-  <!-- <div class="host">{data.host}</div> -->
+      <div class="key">Ip City:</div>
+      <div class="value">
+        {$ipStore?.city}, {$ipStore?.region} &nbsp; {$ipStore?.country}
+      </div>
 
-  <div class="location">
+      <div class="key">Ip Coords:</div>
+      <div class="value">{$ipStore?.lat}, {$ipStore?.lon}</div>
 
-    <!-- <p>Browser: {data?.browser }</p> -->
+      <div class="value">-</div>
+      <div class="key">-</div>
     
-    <div class="host">
-      <div class="label">Host: </div>
-      {data?.host}</div>
-    
-    <div class="hostname">
-      <div class="label">Hostname: </div>
-      {data?.hostname}</div>
-    
-    <div class="ip">
-      <div class="label">Ip: </div>
-      {location?.ip}</div>
+      <div class="value">Geolocation:</div>
+      <div class="key">{$msg ?? ''}</div>
 
-      <br>
+      <div class="value">Geo City</div>
+      <div class="key">{$currentLocation?.city ?? ''}, {$currentLocation?.region ?? ''} &nbsp; {$currentLocation?.country ?? ''}</div>
 
-    <div class="row">
-      <div class="location">
-        <div class="label">Location: </div>
-        {location?.city}, {location?.region}</div>
-      <div class="country">{location?.country}</div>
+      <div class="value">Geo Coords</div>
+      <div class="key">{$currentLocation?.lat ?? ''}, {$currentLocation?.lon ?? ''}</div>
     </div>
-    
-    <div class="gps">
-      <div class="label">GPS: </div>
-      {location?.lat}, {location?.lon}</div>
-      
-      
-  </div> <!-- location -->
- 
 
-  <br>
-<!-- <div>{data.cold ? 'cold' : 'hot'}</div> -->
-</div>
+    <pre>{JSON.stringify($ipStore, 0, 2)}</pre>
+    <pre>{JSON.stringify($currentLocation, 0, 2) ?? 'loading...'}</pre>
+  </div>
+
+
+    <div style="flex: 1"><Notes /></div>
+  </div>
+
 
 <style>
-  .my_page {
-    width: 25em;
-    margin: 5vh auto;
-  }
-
-  .row {
+  .page {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 0 1rem;
+    gap: 0 3rem;
   }
-  
-  .gps {
-    /* text-align: right; */
+  .locationData {
+    display: grid;
+    grid-template-columns: max-content max-content;
+    justify-content: start;  
+    align-content: start;  
+    gap: 0 1rem;  
   }
-  .label {
-    display: inline-block;
-    width: 6rem;
-  }
-
 </style>
-
-<!-- 
-  35.46756, -97.516434
-
-  		ip, real_ip,
-		forwarded,
-    v_forwarded,
-		city,
-    latitude,
-    longitude,
-    country,
-    country_region,
-    timezone,
-		now: new Date().toISOString(),
-		cold: was_cold
-
- -->
