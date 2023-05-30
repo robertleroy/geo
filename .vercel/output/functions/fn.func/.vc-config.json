@@ -1,5 +1,6 @@
 {
-	"runtime": "edge",
-	"envVarsInUse": [],
-	"entrypoint": "index.js"
+	"runtime": "nodejs18.x",
+	"handler": "..\\..\\..\\..\\..\\roble\\Desktop\\sveltekit\\geo\\.svelte-kit\\vercel-tmp\\index.js",
+	"launcherType": "Nodejs",
+	"experimentalResponseStreaming": true
 }
